@@ -10,15 +10,28 @@
 :root {
   --bg: #ffffff;
   --surface: #fffdfd;
-  --surface2: #fff0f5;
-  --accent: #d86c86;
-  --accent2: #ffb6c1;
+  --surface2: #faefff; /* baby purple */
+  --accent: #ff8da1; /* soft baby pink */
+  --accent2: #d8b4fe; /* soft purple */
   --text: #2c2c2c;
   --muted: #888888;
-  --border: rgba(255, 182, 193, 0.4);
+  --border: rgba(255, 141, 161, 0.4);
+  --glow-color: rgba(255, 141, 161, 0.15);
   --font-display: 'Cormorant Garamond', serif;
   --font-mono: 'DM Mono', monospace;
   --font-body: 'DM Sans', sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg: #050505;
+  --surface: #101010;
+  --surface2: #1a1a1a;
+  --accent: #ffea00; /* bold bad girl yellow */
+  --accent2: #ffde00; /* bright confident yellow */
+  --text: #f5f5f5;
+  --muted: #999999;
+  --border: rgba(255, 234, 0, 0.2);
+  --glow-color: rgba(255, 234, 0, 0.08);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,10 +64,10 @@ body::before {
   width: 400px;
   height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,182,193,0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
   pointer-events: none;
   transform: translate(-50%, -50%);
-  transition: left 0.6s ease, top 0.6s ease;
+  transition: left 0.6s ease, top 0.6s ease, background 0.3s ease;
   z-index: 1;
 }
 
@@ -71,7 +84,7 @@ nav {
   transition: border-color 0.3s, background 0.3s;
 }
 nav.scrolled {
-  background: rgba(255,255,255,0.9);
+  background: var(--surface);
   backdrop-filter: blur(20px);
   border-color: var(--border);
 }
@@ -660,6 +673,7 @@ footer {
     <a href="#skills">Skills</a>
     <a href="#projects">Projects</a>
     <a href="#contact">Contact</a>
+    <a href="#" id="theme-toggle" title="Toggle Theme" style="font-size: 1.2rem; margin-left: 1rem;">🌙</a>
   </div>
 </nav>
 
@@ -1042,6 +1056,29 @@ footer {
 </footer>
 
 <script>
+// Theme toggle logic
+const themeToggle = document.getElementById('theme-toggle');
+const htmlEl = document.documentElement;
+const savedTheme = localStorage.getItem('theme');
+
+if(savedTheme) {
+  htmlEl.setAttribute('data-theme', savedTheme);
+  themeToggle.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+}
+
+themeToggle.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (htmlEl.getAttribute('data-theme') === 'dark') {
+    htmlEl.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+    themeToggle.innerText = '🌙';
+  } else {
+    htmlEl.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+    themeToggle.innerText = '☀️';
+  }
+});
+
 // Cursor glow
 const glow = document.getElementById('glow');
 document.addEventListener('mousemove', e => {
