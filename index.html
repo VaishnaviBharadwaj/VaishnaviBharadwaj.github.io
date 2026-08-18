@@ -585,6 +585,120 @@ section {
 }
 .cert-item:hover { border-color: var(--accent); color: var(--accent); background-color: var(--surface2); }
 
+/* ── PUBLICATIONS ── */
+.pub-list { display: flex; flex-direction: column; gap: 0; }
+.pub-card {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 3rem;
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.pub-card:hover { background: var(--surface); padding-left: 1rem; padding-right: 1rem; margin-left: -1rem; margin-right: -1rem; }
+.pub-meta { display: flex; flex-direction: column; gap: 0.7rem; padding-top: 0.2rem; }
+.pub-year {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--accent);
+  line-height: 1;
+}
+.pub-status {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.65rem;
+  background: rgba(163, 42, 78, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(163, 42, 78, 0.35);
+  border-radius: 2px;
+  display: inline-block;
+}
+[data-theme="dark"] .pub-status {
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--accent);
+  border-color: rgba(212, 175, 55, 0.35);
+}
+.pub-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+  margin-bottom: 1rem;
+}
+.pub-venue {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+  padding: 0.9rem 1.2rem;
+  border-left: 2px solid var(--accent);
+  background: var(--surface);
+}
+.pub-venue-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+.pub-venue-item {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+.pub-venue-sep {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0;
+}
+.pub-desc {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text);
+  margin-bottom: 1.2rem;
+}
+.pub-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+.pub-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  background: var(--surface);
+  color: var(--accent);
+  border: 1px solid rgba(163, 42, 78, 0.3);
+}
+.pub-link {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: gap 0.2s;
+}
+.pub-link:hover { gap: 0.7rem; }
+@media (max-width: 768px) {
+  .pub-card { grid-template-columns: 1fr; gap: 1rem; }
+  .pub-card:hover { padding-left: 0; padding-right: 0; margin-left: 0; margin-right: 0; }
+}
+
 /* ── CONTACT ── */
 .contact-grid {
   display: grid;
@@ -721,6 +835,7 @@ footer {
     <a href="#skills">Skills</a>
     <a href="#projects">Projects</a>
     <a href="Vaishnavi_Bharadwaj_CV.pdf" target="_blank">CV</a>
+    <a href="#publications">Publications</a>
     <a href="#contact">Contact</a>
   </div>
   <a href="#" id="theme-toggle" title="Toggle Theme" style="text-decoration:none;">🌙</a>
@@ -1063,10 +1178,47 @@ footer {
 
 <div class="divider"></div>
 
+<!-- PUBLICATIONS -->
+<section id="publications" style="max-width:1200px; margin:0 auto;">
+  <div class="reveal">
+    <div class="section-label">06 / Publications</div>
+    <h2 class="section-title">Research &amp;<br><em>writing</em></h2>
+  </div>
+  <div class="pub-list reveal">
+
+    <div class="pub-card">
+      <div class="pub-meta">
+        <span class="pub-year">2026</span>
+        <span class="pub-status">Under Review</span>
+      </div>
+      <div class="pub-content">
+        <div class="pub-title">Presented at CHORDS 2026 &mdash; manuscript under review for journal publication</div>
+        <div class="pub-venue">
+          <span class="pub-venue-label">Venue options:</span>
+          <span class="pub-venue-item">Digital Scholarship in the Humanities (DSH) &mdash; Oxford University Press &middot; SSCI-indexed</span>
+          <span class="pub-venue-sep">or</span>
+          <span class="pub-venue-item">Journal of Human Values (JHV) &mdash; SAGE Publications &middot; Scopus-indexed</span>
+        </div>
+        <p class="pub-desc">Presented at the CHORDS 2026 conference. The manuscript has been shortlisted for journal publication through the conference proceedings. The paper is currently under multi-stage peer review involving initial screening, editorial evaluation, and revision rounds before final acceptance.</p>
+        <div class="pub-tags">
+          <span class="pub-tag">CHORDS 2026</span>
+          <span class="pub-tag">Conference Paper</span>
+          <span class="pub-tag">Peer Review</span>
+          <span class="pub-tag">Digital Humanities</span>
+        </div>
+        <a href="https://drive.google.com/file/d/1bquvPbdUh8AsjZuCx4Yl9fqJkmIFj6zK/view?usp=sharing" target="_blank" class="pub-link">View Manuscript ↗</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- CONTACT -->
 <section id="contact" style="max-width:1200px; margin:0 auto;">
   <div class="reveal">
-    <div class="section-label">06 / Contact</div>
+    <div class="section-label">07 / Contact</div>
     <h2 class="section-title">Let's<br><em>connect</em></h2>
   </div>
   <div class="contact-grid reveal">
