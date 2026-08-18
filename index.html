@@ -664,8 +664,16 @@ section {
   font-size: 1rem;
   line-height: 1.75;
   color: var(--text);
+  margin-bottom: 0.8rem;
+}
+.pub-authors {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
   margin-bottom: 1.2rem;
 }
+.pub-authors strong { color: var(--accent); font-weight: 600; }
 .pub-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1192,19 +1200,22 @@ footer {
         <span class="pub-status">Under Review</span>
       </div>
       <div class="pub-content">
-        <div class="pub-title">Presented at CHORDS 2026 &mdash; manuscript under review for journal publication</div>
+        <div class="pub-title">Conversational Custodians: Deploying LLM-Powered Agentic Systems for Dynamic Digitisation and Contextual Revival of Intangible Cultural Heritage</div>
         <div class="pub-venue">
           <span class="pub-venue-label">Venue options:</span>
           <span class="pub-venue-item">Digital Scholarship in the Humanities (DSH) &mdash; Oxford University Press &middot; SSCI-indexed</span>
           <span class="pub-venue-sep">or</span>
           <span class="pub-venue-item">Journal of Human Values (JHV) &mdash; SAGE Publications &middot; Scopus-indexed</span>
         </div>
-        <p class="pub-desc">Presented at the CHORDS 2026 conference. The manuscript has been shortlisted for journal publication through the conference proceedings. The paper is currently under multi-stage peer review involving initial screening, editorial evaluation, and revision rounds before final acceptance.</p>
+        <p class="pub-desc">Proposes CAAS — a Governance-Aware Retrieval Architecture (GARA) that embeds community-defined access constraints directly inside the retrieval layer for intangible cultural heritage (ICH). Built a 12,239-node Heritage Memory Graph fusing LLM triple extraction with expert annotation across six Malabar performing arts traditions (Theyyam, Koodiyattam, Kathakali, Padayani, Mudiyettu, Mohiniyattam). Introduces a formal governance function G(q,c) with a hard access-tier threshold and dual-stage sensitivity gating to ensure restricted sacred knowledge is structurally excluded — not statistically penalised — during LLM synthesis. Evaluated across six experiments with 94.2% HMG accuracy and 84.3% community stakeholder agreement.</p>
+        <div class="pub-authors">Nived Krishna &middot; Shubham Kumar &middot; <strong>Vaishnavi Bharadwaj</strong></div>
         <div class="pub-tags">
-          <span class="pub-tag">CHORDS 2026</span>
-          <span class="pub-tag">Conference Paper</span>
-          <span class="pub-tag">Peer Review</span>
-          <span class="pub-tag">Digital Humanities</span>
+          <span class="pub-tag">CHORDS 2026 · IIIT Kottayam</span>
+          <span class="pub-tag">LLM Agents</span>
+          <span class="pub-tag">RAG</span>
+          <span class="pub-tag">Cultural Heritage</span>
+          <span class="pub-tag">Indigenous Data Sovereignty</span>
+          <span class="pub-tag">Graph AI</span>
         </div>
         <a href="https://drive.google.com/file/d/1bquvPbdUh8AsjZuCx4Yl9fqJkmIFj6zK/view?usp=sharing" target="_blank" class="pub-link">View Manuscript ↗</a>
       </div>
