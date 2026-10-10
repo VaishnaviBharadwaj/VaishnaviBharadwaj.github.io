@@ -771,16 +771,15 @@ footer {
   z-index: 2;
 }
 .footer-signature {
-  margin: 0 auto 1.2rem auto;
+  margin: 0 auto 1rem auto;
   display: block;
-  height: 58px;
-  width: auto;
+  font-family: 'Alex Brush', cursive;
+  font-size: 5rem;
+  line-height: 1.15;
+  color: var(--accent);
+  text-align: center;
   transform: rotate(-4deg);
-  opacity: 0.92;
-}
-[data-theme="dark"] .footer-signature {
-  filter: invert(1);
-  opacity: 0.9;
+  opacity: 0.95;
 }
 .footer-brand {
   font-family: var(--font-display);
@@ -818,7 +817,32 @@ footer {
 }
 
 /* ── LIVE TRAINING CONSOLE — borderless, printed into the page ── */
-.nn-console { position: relative; margin-top: 3.5rem; flex: 0 0 100%; width: 100%; }
+.nn-intro { text-align: center; margin-bottom: 0.4rem; }
+.nn-intro-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.nn-intro-label b { color: var(--accent); font-weight: 400; }
+.nn-intro-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 4.4vw, 3.3rem);
+  font-weight: 300;
+  color: var(--text);
+  margin: 0.45rem 0 0.6rem;
+  line-height: 1.05;
+}
+.nn-intro-title em { font-style: italic; color: var(--accent); }
+.nn-intro-sub {
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 0.97rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.nn-console { position: relative; margin-top: 0.8rem; flex: 0 0 100%; width: 100%; }
 #nn-canvas {
   display: block;
   width: 100vw;
@@ -907,6 +931,25 @@ footer {
   .nn-live { animation: none; }
 }
 
+/* ── 3-D ENGRAVED BACKGROUNDS — ink scenes behind sections ── */
+#skills, #contact { position: relative; }
+#skills > .reveal, #skills > .skills-grid,
+#contact > .reveal, #contact > .contact-grid { position: relative; z-index: 1; }
+.bg-viz {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-viz-top { inset: 0 0 auto 0; height: 480px; }
+@media (max-width: 768px) {
+  .nn-intro-title { font-size: 2.05rem; }
+  .nn-intro-sub { font-size: 0.9rem; padding: 0 0.4rem; }
+  .footer-signature { font-size: 3.4rem; }
+}
+
 /* ── ENGRAVED PORTRAIT — duotone, printed into the page ── */
 .portrait-fig { margin-top: 2.4rem; }
 .portrait-plate {
@@ -939,17 +982,6 @@ footer {
   filter: grayscale(1) contrast(1.02) brightness(0.98);
   opacity: 0.92;
 }
-.portrait-fig figcaption {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 0.7rem;
-}
-.portrait-fig figcaption span:first-child { color: var(--accent); }
 
 /* ── BLOG POST LIST (Bevish Blogs card) ── */
 .blog-list { margin-top: 0.6rem; }
@@ -1229,6 +1261,11 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
     </div>
   </div>
 
+  <div class="nn-intro reveal">
+    <div class="nn-intro-label">gradient descent · a neural network, from scratch — <b>training live in your browser</b></div>
+    <h2 class="nn-intro-title">What is <em>life?</em></h2>
+    <p class="nn-intro-sub">Start wrong. Measure exactly how wrong you are. Take one small step toward less wrong. Repeat ten thousand times. That is all the network below is doing — learning to read the spiral, one correction at a time. Click anywhere on the surface to hand it a new point, and watch it re-learn.</p>
+  </div>
   <div class="nn-console reveal" id="nn-console" aria-label="Live neural network demo">
     <canvas id="nn-canvas" role="img" aria-label="A small neural network training live in the browser: an evolving decision boundary separating two classes of points"></canvas>
     <div class="nn-head">
@@ -1277,7 +1314,6 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
         <div class="portrait-plate">
           <img src="images/profile.jpg" alt="Black-and-white portrait of Vaishnavi Bharadwaj">
         </div>
-        <figcaption><span>fig. 01</span><span>the person behind the models</span></figcaption>
       </figure>
     </div>
     <div class="about-right">
@@ -1394,6 +1430,7 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
 <!-- SKILLS -->
 <section id="skills" style="max-width:1200px; margin:0 auto;">
+  <canvas class="bg-viz bg-viz-top" id="bg-loss" aria-hidden="true"></canvas>
   <div class="reveal">
     <div class="section-label">03 / Skills</div>
     <h2 class="section-title">Tools &amp;<br><em>technologies</em></h2>
@@ -1700,6 +1737,7 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
 <!-- CONTACT -->
 <section id="contact" style="max-width:1200px; margin:0 auto;">
+  <canvas class="bg-viz" id="bg-flow" aria-hidden="true"></canvas>
   <div class="reveal">
     <div class="section-label">07 / Contact</div>
     <h2 class="section-title">Let's<br><em>connect</em></h2>
@@ -1767,12 +1805,13 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
       <p>I'm <strong>open to opportunities</strong> in software engineering, data science, and research roles — particularly those at the intersection of AI and systems.</p>
       <p style="margin-top:1rem;">I'm actively seeking <strong>research opportunities</strong> in trustworthy and interpretable AI for education. If you're a researcher working in this space, I'd genuinely love to talk.</p>
       <p style="margin-top:1rem;">Outside of work: I hold a <strong>Senior Diploma in Kathak</strong> from Allahabad University, I am a passionate <strong>basketball player</strong>, and I've competed in hardware engineering (1st place, CIRCUITRIX, IEEE 2019).</p>
+      <p style="margin-top:1.6rem;">Whether it's a role, a research collaboration, or a long conversation about why a model made the decision it did — my inbox is open. Worst case, we share a good discussion; best case, we build something worth explaining.</p>
     </div>
   </div>
 </section>
 
 <footer style="flex-direction: column;">
-  <img class="footer-signature" src="images/signature.jpg" alt="Handwritten signature of Vaishnavi Bharadwaj">
+  <div class="footer-signature">Vaishnavi Bharadwaj</div>
   <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div class="footer-brand">Vaishnavi Bharadwaj</div>
     <div class="footer-copy">© 2026 · Built with intention</div>
@@ -1828,32 +1867,6 @@ const observer = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.1 });
 reveals.forEach(el => observer.observe(el));
-</script>
-
-<script>
-// ═══════════ REAL SIGNATURE — engrave the handwriting into the page ═══════════
-// The scanned JPG has a paper background; convert luminance → alpha so the ink
-// sits directly on the page (dark theme just inverts the transparent PNG).
-(function () {
-  var img = document.querySelector('.footer-signature');
-  if (!img) return;
-  var src = new Image();
-  src.onload = function () {
-    var c = document.createElement('canvas');
-    c.width = src.naturalWidth; c.height = src.naturalHeight;
-    var x = c.getContext('2d');
-    x.drawImage(src, 0, 0);
-    var d = x.getImageData(0, 0, c.width, c.height), p = d.data;
-    for (var i = 0; i < p.length; i += 4) {
-      var L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
-      p[i] = p[i + 1] = p[i + 2] = 17; // ink — neutral, inverts cleanly in dark theme
-      p[i + 3] = Math.max(0, Math.min(255, Math.round((215 - L) * 2.4))); // paper → transparent
-    }
-    x.putImageData(d, 0, 0);
-    img.src = c.toDataURL('image/png');
-  };
-  src.src = img.src;
-})();
 </script>
 
 <script>
@@ -2020,6 +2033,7 @@ reveals.forEach(el => observer.observe(el));
   off.width = RES; off.height = RES;
   var offCtx = off.getContext('2d');
   var img = offCtx.createImageData(RES, RES);
+  var FIELD = new Float32Array(RES * RES);
   var Wc = 300, Hc = 200;
   function resize() {
     var r = canvas.getBoundingClientRect();
@@ -2033,6 +2047,32 @@ reveals.forEach(el => observer.observe(el));
   function half() { return Math.min(Wc, Hc) / 2 * 0.94; }
   function spanX() { return (Wc / 2) / half(); } // world x half-range — the band is wider than tall
 
+  // marching-squares iso-lines — the model's belief etched like a topographic map
+  function drawIso(level, alpha, width, hf, cy) {
+    var csW = Wc / RES, csH = (hf * 2) / RES, topY = cy - hf;
+    ctx.beginPath();
+    for (var gy = 0; gy < RES - 1; gy++) {
+      for (var gx = 0; gx < RES - 1; gx++) {
+        var v0 = FIELD[gy * RES + gx], v1 = FIELD[gy * RES + gx + 1],
+            v2 = FIELD[(gy + 1) * RES + gx + 1], v3 = FIELD[(gy + 1) * RES + gx];
+        var code = (v0 > level ? 1 : 0) | (v1 > level ? 2 : 0) | (v2 > level ? 4 : 0) | (v3 > level ? 8 : 0);
+        if (code === 0 || code === 15) continue;
+        var x0 = (gx + 0.5) * csW, y0 = topY + (gy + 0.5) * csH, seg = [];
+        if ((v0 > level) !== (v1 > level)) seg.push([x0 + csW * (level - v0) / (v1 - v0), y0]);
+        if ((v1 > level) !== (v2 > level)) seg.push([x0 + csW, y0 + csH * (level - v1) / (v2 - v1)]);
+        if ((v3 > level) !== (v2 > level)) seg.push([x0 + csW * (level - v3) / (v2 - v3), y0 + csH]);
+        if ((v0 > level) !== (v3 > level)) seg.push([x0, y0 + csH * (level - v0) / (v3 - v0)]);
+        if (seg.length >= 2) {
+          ctx.moveTo(seg[0][0], seg[0][1]); ctx.lineTo(seg[1][0], seg[1][1]);
+          if (seg.length === 4) { ctx.moveTo(seg[2][0], seg[2][1]); ctx.lineTo(seg[3][0], seg[3][1]); }
+        }
+      }
+    }
+    ctx.strokeStyle = rgba(PAL.m, alpha);
+    ctx.lineWidth = width;
+    ctx.stroke();
+  }
+
   function draw() {
     var hf = half(), cx = Wc / 2, cy = Hc / 2, k, q;
     ctx.fillStyle = COL.bg;
@@ -2044,6 +2084,7 @@ reveals.forEach(el => observer.observe(el));
       for (var gx = 0; gx < RES; gx++) {
         var wx = (2 * (gx + 0.5) / RES - 1) * sx;
         var pv = forward(wx, wy);
+        FIELD[gy * RES + gx] = pv;
         var t = Math.pow(Math.abs(pv - 0.5) * 2, 0.65) * 0.36;
         var c = pv > 0.5 ? PAL.a : PAL.b;
         var idx = cell++ * 4;
@@ -2074,6 +2115,10 @@ reveals.forEach(el => observer.observe(el));
     ctx.moveTo(0, cy); ctx.lineTo(Wc, cy);
     ctx.moveTo(cx, cy - hf); ctx.lineTo(cx, cy + hf);
     ctx.stroke();
+    // engraved contours — iso-probability curves pressed into the paper
+    drawIso(0.15, 0.085, 0.8, hf, cy); drawIso(0.3, 0.085, 0.8, hf, cy);
+    drawIso(0.7, 0.085, 0.8, hf, cy); drawIso(0.85, 0.085, 0.8, hf, cy);
+    drawIso(0.5, 0.30, 1.2, hf, cy);
     // data points
     for (k = 0; k < DATA.length; k++) {
       var pt = DATA[k];
@@ -2096,6 +2141,16 @@ reveals.forEach(el => observer.observe(el));
     fadeB.addColorStop(1, COL.bg);
     ctx.fillStyle = fadeB;
     ctx.fillRect(0, Hc - 130, Wc, 130);
+    var fadeL = ctx.createLinearGradient(0, 0, 90, 0);
+    fadeL.addColorStop(0, COL.bg);
+    fadeL.addColorStop(1, rgba(PAL.bg, 0));
+    ctx.fillStyle = fadeL;
+    ctx.fillRect(0, 0, 90, Hc);
+    var fadeR = ctx.createLinearGradient(Wc - 90, 0, Wc, 0);
+    fadeR.addColorStop(0, rgba(PAL.bg, 0));
+    fadeR.addColorStop(1, COL.bg);
+    ctx.fillStyle = fadeR;
+    ctx.fillRect(Wc - 90, 0, 90, Hc);
     // loss sparkline (kept below the floating readout chip)
     if (lossHist.length > 2) {
       var sw = Math.min(170, Wc * 0.34), sh = 34, mx = 14, my = 58;
@@ -2216,6 +2271,199 @@ reveals.forEach(el => observer.observe(el));
   if (reduced) { running = false; if (pauseBtn) pauseBtn.textContent = '▶ run'; trainEpochs(80); }
   draw();
   readout();
+})();
+</script>
+
+<script>
+// ═══════════ 3-D ENGRAVED BACKGROUNDS — loss landscape (skills) + converging flow (contact) ═══════════
+// Pseudo-3D ink scenes drawn straight onto the page: a slowly turning loss
+// landscape with a ball descending it by gradient descent, and a flow field
+// where every stream converges on one minimum. No libraries — projection math.
+(function () {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rgba(hex, a) {
+    var m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(hex || '').trim());
+    if (!m) return 'rgba(136,136,136,' + a + ')';
+    var s = m[1];
+    if (s.length === 3) s = s[0] + s[0] + s[1] + s[1] + s[2] + s[2];
+    var n = parseInt(s, 16);
+    return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+  function projector(yaw, pitch, dist, yA) {
+    var cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    return function (x, y, z, w, h, f) {
+      var X = x * cy - y * sy, Y = x * sy + y * cy;
+      var Y2 = Y * cp - z * sp, Z2 = Y * sp + z * cp;
+      var s = f / (dist - Y2);
+      return [w / 2 + X * s, h * (yA || 0.54) + Z2 * s, dist - Y2];
+    };
+  }
+  function makeViz(id, secId, setup) {
+    var cv = document.getElementById(id), sec = document.getElementById(secId);
+    if (!cv || !sec) return;
+    var ctx = cv.getContext('2d');
+    var S = { w: 0, h: 0, inView: true, t: Math.random() * 100 };
+    function pal() {
+      var cs = getComputedStyle(document.documentElement);
+      function px(n, fb) { var v = cs.getPropertyValue(n); return (v && v.trim()) || fb; }
+      return { bg: px('--bg', '#fffdfd'), ink: px('--muted', '#4a282d'), accent: px('--accent', '#a32a4e') };
+    }
+    function resize() {
+      var r = sec.getBoundingClientRect();
+      S.w = Math.max(280, Math.round(r.width));
+      S.h = Math.max(240, Math.round(r.height));
+      var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      cv.width = Math.round(S.w * dpr);
+      cv.height = Math.round(S.h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) { S.inView = en[0].isIntersecting; }, { threshold: 0.02 }).observe(sec);
+    }
+    var api = setup(ctx, S, pal);
+    window.addEventListener('resize', function () { resize(); if (reduced) api.static(); });
+    resize();
+    if (reduced) { api.static(); return; }
+    (function loop() {
+      requestAnimationFrame(loop);
+      if (document.hidden || !S.inView) return;
+      api.frame();
+    })();
+  }
+  // ── skills: the loss landscape, and a ball learning to descend it ──
+  makeViz('bg-loss', 'skills', function (ctx, S, pal) {
+    var N = 22, COLS = 52;
+    function loss(u, v) {
+      return (u * u + v * v) * 0.42
+        + Math.exp(-4.2 * ((u - 0.62) * (u - 0.62) + (v - 0.5) * (v - 0.5)))
+        - 0.72 * Math.exp(-5.5 * ((u + 0.5) * (u + 0.5) + (v + 0.42) * (v + 0.42)))
+        + 0.06 * Math.sin(3.1 * u) * Math.cos(2.6 * v);
+    }
+    function grad(u, v) {
+      var e = 0.01;
+      return [(loss(u + e, v) - loss(u - e, v)) / (2 * e), (loss(u, v + e) - loss(u, v - e)) / (2 * e)];
+    }
+    var ball = { u: -0.85, v: 0.8, vu: 0, vv: 0, trail: [], still: 0 };
+    function respawn() {
+      var a = Math.random() * 2 * Math.PI, r = 0.72 + Math.random() * 0.22;
+      ball.u = Math.cos(a) * r; ball.v = Math.sin(a) * r;
+      ball.vu = 0; ball.vv = 0; ball.trail = []; ball.still = 0;
+    }
+    function stepBall() {
+      var g = grad(ball.u, ball.v);
+      ball.vu = (ball.vu - g[0] * 0.0022) * 0.982;
+      ball.vv = (ball.vv - g[1] * 0.0022) * 0.982;
+      ball.u += ball.vu; ball.v += ball.vv;
+      var sp = Math.sqrt(ball.vu * ball.vu + ball.vv * ball.vv);
+      ball.still = sp < 0.0012 ? ball.still + 1 : 0;
+      ball.trail.push([ball.u, ball.v]);
+      if (ball.trail.length > 110) ball.trail.shift();
+      if (ball.still > 40 || Math.abs(ball.u) > 1.05 || Math.abs(ball.v) > 1.05) respawn();
+    }
+    function Z(u, v) { return loss(u, v) * 0.6 - 0.3; }
+    function scene(yaw) {
+      var w = S.w, h = S.h, f = Math.min(w * 0.55, 760);
+      var P = projector(yaw, -0.45, 3.4, 0.36), i, j, u, v, p;
+      ctx.clearRect(0, 0, w, h);
+      var palv = pal();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = rgba(palv.ink, 0.15);
+      for (j = 0; j <= N; j++) {                       // rows
+        v = -1 + 2 * j / N;
+        ctx.beginPath();
+        for (i = 0; i <= COLS; i++) {
+          u = -1 + 2 * i / COLS;
+          p = P(u, v, Z(u, v), w, h, f);
+          if (i) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]);
+        }
+        ctx.stroke();
+      }
+      for (i = 0; i <= N; i++) {                       // columns
+        u = -1 + 2 * i / N;
+        ctx.beginPath();
+        for (j = 0; j <= COLS; j++) {
+          v = -1 + 2 * j / COLS;
+          p = P(u, v, Z(u, v), w, h, f);
+          if (j) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]);
+        }
+        ctx.stroke();
+      }
+      // the descent — the only accent in the engraving
+      var T = ball.trail;
+      if (T.length > 3) {
+        var n3 = Math.max(1, T.length - 40);
+        for (var c = 0; c < 3; c++) {
+          var from = Math.max(0, c === 0 ? 0 : c === 1 ? n3 : T.length - 14);
+          var to = Math.min(T.length - 1, c === 0 ? n3 : c === 1 ? T.length - 14 : T.length - 1);
+          if (to - from < 2) continue;
+          ctx.beginPath();
+          for (i = from; i <= to; i++) {
+            p = P(T[i][0], T[i][1], Z(T[i][0], T[i][1]), w, h, f);
+            if (i === from) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
+          }
+          ctx.strokeStyle = rgba(palv.accent, c === 0 ? 0.16 : c === 1 ? 0.38 : 0.85);
+          ctx.lineWidth = c === 2 ? 1.6 : 1.1;
+          ctx.stroke();
+        }
+      }
+      var bp = P(ball.u, ball.v, Z(ball.u, ball.v), w, h, f);
+      ctx.beginPath(); ctx.arc(bp[0], bp[1], 3, 0, 2 * Math.PI);
+      ctx.fillStyle = rgba(palv.accent, 0.9); ctx.fill();
+    }
+    return {
+      frame: function () {
+        S.t += 0.004;
+        stepBall();
+        scene(0.6 + Math.sin(S.t * 0.5) * 0.3);
+      },
+      static: function () {
+        for (var i = 0; i < 600; i++) stepBall();
+        scene(0.6);
+      }
+    };
+  });
+  // ── contact: a flow field where every stream finds the same minimum ──
+  makeViz('bg-flow', 'contact', function (ctx, S, pal) {
+    var NP = 110, MIN = { u: 0.08, v: 0.04 }, parts = [], i;
+    function field(u, v) {
+      var du = MIN.u - u, dv = MIN.v - v;
+      var d = Math.sqrt(du * du + dv * dv) + 0.06;
+      var sw = 0.5 * d; // curl — streams curve in, they don't march straight
+      return [du / d - dv / d * sw, dv / d + du / d * sw];
+    }
+    function reset(p) {
+      var a = Math.random() * 2 * Math.PI, r = 0.25 + Math.random() * 0.95;
+      p.u = MIN.u + Math.cos(a) * r;
+      p.v = MIN.v + Math.sin(a) * r * 0.62;
+    }
+    for (i = 0; i < NP; i++) { var p = { u: 0, v: 0 }; reset(p); parts.push(p); }
+    var P = projector(-0.46, -1.02, 3.1);
+    function paint(advance) {
+      var w = S.w, h = S.h, f = Math.min(w, h) * 1.12, palv = pal();
+      if (advance) { ctx.fillStyle = rgba(palv.bg, 0.07); ctx.fillRect(0, 0, w, h); }
+      ctx.lineWidth = 1.1;
+      for (var k = 0; k < NP; k++) {
+        var q = parts[k], F = field(q.u, q.v);
+        var nu = q.u + F[0] * 0.008, nv = q.v + F[1] * 0.008;
+        var a = P(q.u, q.v, 0, w, h, f), b = P(nu, nv, 0, w, h, f);
+        var depth = Math.max(0, Math.min(1, (4.1 - b[2]) / 1.5));
+        ctx.strokeStyle = rgba(palv.ink, 0.06 + depth * 0.17);
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+        if (advance) {
+          q.u = nu; q.v = nv;
+          var d = Math.sqrt((MIN.u - q.u) * (MIN.u - q.u) + (MIN.v - q.v) * (MIN.v - q.v));
+          if (d < 0.045 || Math.abs(q.u - MIN.u) > 1.3 || Math.abs(q.v - MIN.v) > 0.85) reset(q);
+        }
+      }
+      var m = P(MIN.u, MIN.v, 0, w, h, f);
+      ctx.beginPath(); ctx.arc(m[0], m[1], 2.6, 0, 2 * Math.PI);
+      ctx.fillStyle = rgba(palv.accent, 0.85); ctx.fill();
+    }
+    return {
+      frame: function () { paint(true); },
+      static: function () { for (var k = 0; k < 500; k++) paint(true); }
+    };
+  });
 })();
 </script>
 
