@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vaishnavi Bharadwaj</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23121212'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23d4af37' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='4.5' fill='%23d4af37'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&family=Alex+Brush&family=Pinyon+Script&display=swap" rel="stylesheet">
 <style>
@@ -17,6 +18,7 @@
   --muted: #4a282d; 
   --border: rgba(163, 42, 78, 0.25); 
   --glow-color: rgba(163, 42, 78, 0.08); 
+  --class-b: #5c7a96;
   --font-display: 'Cormorant Garamond', serif;
   --font-mono: 'DM Mono', monospace;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -31,6 +33,7 @@
   --text: #ffffff;
   --muted: #cccccc;
   --border: rgba(255, 255, 255, 0.15);
+  --class-b: #94b3cc;
   --glow-color: rgba(212, 175, 55, 0.08); 
 }
 
@@ -814,17 +817,96 @@ footer {
   transform: perspective(1200px) translateY(0) rotateX(0deg);
 }
 
-/* ── 3D BACKGROUND CANVAS ── */
-#bg3d {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.4s ease;
+/* ── LIVE TRAINING CONSOLE ── */
+.nn-console {
+  margin-top: 3.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 40px 90px -50px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
 }
+.nn-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.nn-dots { display: inline-flex; gap: 5px; }
+.nn-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+.nn-dots i:first-child { background: var(--accent); }
+.nn-title { color: var(--muted); }
+.nn-live { color: var(--accent); animation: nn-blink 1.6s ease-in-out infinite; }
+@keyframes nn-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.nn-readout { margin-left: auto; font-variant-numeric: tabular-nums; }
+.nn-readout strong { color: var(--text); font-weight: 400; }
+#nn-canvas { display: block; width: 100%; height: 400px; cursor: crosshair; }
+.nn-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem 1.2rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.2rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+.nn-group { display: inline-flex; gap: 0.4rem; align-items: center; }
+.nn-btn {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.32rem 0.7rem;
+  cursor: pointer;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+}
+.nn-btn:hover { color: var(--text); border-color: var(--accent); }
+.nn-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.nn-hint { margin-left: auto; color: var(--muted); opacity: 0.85; letter-spacing: 0.03em; }
+.nn-hint .dot-a { color: var(--accent); }
+.nn-hint .dot-b { color: var(--class-b); }
+@media (max-width: 768px) {
+  #nn-canvas { height: 280px; }
+  .nn-hint { margin-left: 0; width: 100%; }
+  .nn-readout { font-size: 0.72rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nn-live { animation: none; }
+}
+
+/* ── BLOG POST LIST (Bevish Blogs card) ── */
+.blog-list { margin-top: 0.6rem; }
+.blog-row {
+  display: block;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.7rem 0.95rem;
+  margin-top: 0.55rem;
+  transition: border-color 0.2s, background 0.2s, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.blog-row:hover { border-color: var(--accent); background: var(--surface2); transform: translateX(5px); }
+.blog-row-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.blog-row-title em { font-style: normal; font-size: 0.7rem; color: var(--accent); white-space: nowrap; letter-spacing: 0.06em; }
+.blog-row-sum { display: block; margin-top: 0.3rem; font-size: 0.86rem; line-height: 1.55; color: var(--muted); }
 
 /* ── SCROLL PROGRESS BAR ── */
 #scroll-progress {
@@ -944,6 +1026,8 @@ footer {
   transition: background 0.2s, color 0.2s;
 }
 .metric-chip:hover { background: var(--accent); color: var(--bg); }
+a.project-tag { color: var(--muted); text-decoration: none; transition: color 0.2s, border-color 0.2s; }
+a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ── SECTION SUBTITLE ── */
 .section-sub {
@@ -1008,7 +1092,6 @@ footer {
 
 <div class="cursor-glow" id="glow"></div>
 <div id="scroll-progress" aria-hidden="true"></div>
-<canvas id="bg3d" aria-hidden="true"></canvas>
 <div class="cursor-dot" aria-hidden="true"></div>
 <div class="cursor-ring" aria-hidden="true"></div>
 <script>document.body.classList.add('js');</script>
@@ -1035,7 +1118,7 @@ footer {
       <div class="hero-eyebrow">Machine Learning · Research · Engineering</div>
       <h1 class="hero-name">Vaishnavi<br><em>Bharadwaj</em></h1>
       <p class="hero-role">Advanced Application Engineering Analyst @ <a href="https://www.accenture.com" target="_blank" style="color: var(--accent); text-decoration: none;">Accenture</a> &nbsp;·&nbsp; MBA Business Analytics, <a href="https://manipal.edu" target="_blank" style="color: var(--accent); text-decoration: none;">MAHE</a> &nbsp;·&nbsp; B.Tech, <a href="https://hithaldia.in/" target="_blank" style="color: var(--accent); text-decoration: none;">HIT</a></p>
-      <p class="hero-desc">I build machine-learning systems that survive production — RAG pipelines with second-level citations, fine-tuned transformers, gradient-boosting models on 505K+ records — and I ask questions about why they fail. Somewhere between distributed infrastructure and causal AI is the problem I want to spend years solving.</p>
+      <p class="hero-desc">I build machine-learning systems that survive production — RAG pipelines with second-level citations, fine-tuned transformers, gradient-boosting models on 505K+ records — and I ask questions about why they fail. Somewhere between distributed infrastructure and interpretable AI is the problem I want to spend years solving.</p>
       <div class="hero-actions">
         <a href="#contact" class="btn-primary">Get in touch</a>
         <a href="Vaishnavi_Bharadwaj_CV.pdf" target="_blank" class="btn-ghost">View CV</a>
@@ -1076,6 +1159,28 @@ footer {
       </div>
     </div>
   </div>
+
+  <div class="nn-console reveal" id="nn-console" aria-label="Live neural network demo">
+    <div class="nn-head">
+      <span class="nn-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="nn-title">gradient_descent.py — <span class="nn-live">● live</span></span>
+      <span class="nn-readout"><strong id="nn-epoch">epoch 0</strong> · loss <strong id="nn-loss">—</strong> · acc <strong id="nn-acc">—</strong> · lr 0.03</span>
+    </div>
+    <canvas id="nn-canvas" role="img" aria-label="A small neural network training live in the browser: an evolving decision boundary separating two classes of points"></canvas>
+    <div class="nn-foot">
+      <span class="nn-group" role="group" aria-label="Choose dataset">
+        <button type="button" class="nn-btn active" data-ds="spiral">spiral</button>
+        <button type="button" class="nn-btn" data-ds="rings">rings</button>
+        <button type="button" class="nn-btn" data-ds="xor">xor</button>
+        <button type="button" class="nn-btn" data-ds="moons">moons</button>
+      </span>
+      <span class="nn-group">
+        <button type="button" class="nn-btn" id="nn-pause">⏸ pause</button>
+        <button type="button" class="nn-btn" id="nn-reset">↺ re-init weights</button>
+      </span>
+      <span class="nn-hint">click — add <span class="dot-a">●</span> &nbsp;·&nbsp; shift-click — add <span class="dot-b">●</span></span>
+    </div>
+  </div>
 </section>
 
 <div class="divider"></div>
@@ -1090,22 +1195,22 @@ footer {
     <div class="about-left">
       <div class="section-label" style="margin-bottom:1.5rem;">Research interest</div>
       <p style="font-family:var(--font-display); font-size:1.15rem; font-weight:400; line-height:1.7; color:var(--text);">
-        Federated causal discovery. Privacy-preserving AI. The question of what changes when you understand a cause instead of just predicting an outcome.
+        Trustworthy, interpretable AI for education. Can a model ground every answer in the lecture it learned from — and can we judge that independently, instead of taking fluency on faith? Neuro-symbolic reasoning asks the same question of representations themselves.
       </p>
       <div class="about-tags">
-        <span class="tag">Causal AI</span>
-        <span class="tag">Federated Learning</span>
-        <span class="tag">Privacy-preserving ML</span>
-        <span class="tag">Distributed Systems</span>
-        <span class="tag">Data Governance</span>
-        <span class="tag">PhD Applicant</span>
+        <span class="tag">Interpretable AI</span>
+        <span class="tag">AI for Education</span>
+        <span class="tag">Neuro-Symbolic Reasoning</span>
+        <span class="tag">Grounding &amp; Faithfulness</span>
+        <span class="tag">RAG Evaluation</span>
+        <span class="tag">Research Track</span>
       </div>
     </div>
     <div class="about-right">
       <div class="pull-quote" style="color: var(--accent); font-weight: 500;">"The system screams a broken note, but hides the song the logic wrote."</div>
       <p>I'm a software and infrastructure engineer with <strong>3.5+ years at <a href="https://www.accenture.com" target="_blank" style="color: var(--accent); text-decoration: none;">Accenture</a></strong>, where I've worked across telecommunications (<a href="https://www.att.com" target="_blank" style="color: var(--accent); text-decoration: none;">AT&T</a>) and insurance (<a href="https://www.allianz.com" target="_blank" style="color: var(--accent); text-decoration: none;">Allianz</a>). My work spans Linux server reliability, API observability, backend development, and production support.</p>
       <p>I hold a <strong>B.Tech in Applied Electronics &amp; Instrumentation Engineering</strong> from the <a href="https://hithaldia.in/" target="_blank" style="color: var(--accent); text-decoration: none;">Haldia Institute of Technology</a> (CGPA: 9.14). Building on that foundation, I am currently completing an <strong>MBA in Business Analytics at <a href="https://manipal.edu" target="_blank" style="color: var(--accent); text-decoration: none;">Manipal Academy of Higher Education</a></strong> (CGPA 9.45), and independently built a full-stack educational platform — the Data Science Learning Hub — covering 12 subjects, 70+ modules, and the complete GATE DA syllabus from scratch.</p>
-      <p>I grew up in Varanasi, next to the Ganga, and the question of why contamination events happen — not just when — became the seed of my PhD research direction in federated causal discovery. I'm actively applying to doctoral programmes, including IIT Kharagpur.</p>
+      <p>My churn project set the tone for how I think: 87.73% accuracy was the headline, but the part I cared about was the coefficient analysis underneath — which features the model actually leaned on, and what each one was worth in dollars. A high score is easy to be impressed by; understanding has to be checked. That conviction — that a model should show its work before we trust its answer — is what points me toward interpretable AI for education.</p>
     </div>
   </div>
 </section>
@@ -1234,7 +1339,7 @@ footer {
         <span class="skill-pill">pgvector</span>
         <span class="skill-pill">TF-IDF</span>
         <span class="skill-pill">Causal Inference</span>
-        <span class="skill-pill">Federated Learning</span>
+        <span class="skill-pill">Interpretable ML</span>
         <span class="skill-pill">Feature Engineering</span>
         <span class="skill-pill">Model Evaluation</span>
       </div>
@@ -1420,7 +1525,29 @@ footer {
     <div class="project-card" data-tilt>
       <div class="project-num">06</div>
       <div class="project-name"><a href="https://bevishblogs.wordpress.com/" target="_blank" style="color: inherit; text-decoration: none;">Bevish Blogs ↗</a></div>
-      <div class="project-desc">A collection of my thoughts, learnings, and experiences shared through my personal WordPress blog.</div>
+      <div class="project-desc">Personal essays, 2019 → 2022 — responsibility carried early, spirit against illusion, reel life vs. real life, food as a daily choice, and the economics of environmental damage. My own voice, unfiltered.</div>
+      <div class="blog-list">
+        <a class="blog-row" href="https://bevishblogs.wordpress.com/2022/12/09/my-life/" target="_blank">
+          <span class="blog-row-title">My Life — Bitterness of Life <em>Dec 2022</em></span>
+          <span class="blog-row-sum">On carrying adult responsibilities from childhood, surviving abuse and trauma, and learning to face your own weaknesses instead of hiding from them.</span>
+        </a>
+        <a class="blog-row" href="https://bevishblogs.wordpress.com/2020/05/11/spiritual-liberation/" target="_blank">
+          <span class="blog-row-title">Spiritual Liberation <em>May 2020</em></span>
+          <span class="blog-row-sum">The soul as independent of illusion and obligation — a meditation on detachment, and on death as the start of the journey to the divine.</span>
+        </a>
+        <a class="blog-row" href="https://bevishblogs.wordpress.com/2019/09/28/behind-the-scenes/" target="_blank">
+          <span class="blog-row-title">Behind the Scenes <em>Sep 2019</em></span>
+          <span class="blog-row-sum">Glamour is a highlight reel — on celebrity culture, and the depression, rejection and anxiety that stay off-camera.</span>
+        </a>
+        <a class="blog-row" href="https://bevishblogs.wordpress.com/2019/08/29/vegan-foods/" target="_blank">
+          <span class="blog-row-title">Vegan Foods <em>Aug 2019</em></span>
+          <span class="blog-row-sum">A case for vegetarianism — cholesterol, digestion and longevity, argued with everyday evidence rather than guilt.</span>
+        </a>
+        <a class="blog-row" href="https://bevishblogs.wordpress.com/2019/08/27/environmentalism/" target="_blank">
+          <span class="blog-row-title">Environmentalism <em>Aug 2019</em></span>
+          <span class="blog-row-sum">Environmental damage is an economic story too — how pollution and deforestation feed inflation, told through the dollar–rupee rate.</span>
+        </a>
+      </div>
     </div>
     <div class="project-card" data-tilt>
       <div class="project-num">07</div>
@@ -1564,7 +1691,7 @@ footer {
     </div>
     <div class="contact-right">
       <p>I'm <strong>open to opportunities</strong> in software engineering, data science, and research roles — particularly those at the intersection of AI and systems.</p>
-      <p style="margin-top:1rem;">I'm also actively applying for <strong>PhD programmes</strong> in causal AI and federated learning. If you're a researcher working in this space, I'd genuinely love to talk.</p>
+      <p style="margin-top:1rem;">I'm actively seeking <strong>research opportunities</strong> in trustworthy and interpretable AI for education. If you're a researcher working in this space, I'd genuinely love to talk.</p>
       <p style="margin-top:1rem;">Outside of work: I hold a <strong>Senior Diploma in Kathak</strong> from Allahabad University, I am a passionate <strong>basketball player</strong>, and I've competed in hardware engineering (1st place, CIRCUITRIX, IEEE 2019).</p>
     </div>
   </div>
@@ -1629,148 +1756,322 @@ const observer = new IntersectionObserver(entries => {
 reveals.forEach(el => observer.observe(el));
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ═══════════ INTERACTIVE 3D BACKGROUND — GLOBE + ORBITING SATELLITES ═══════════
+// ═══════════ LIVE NEURAL NETWORK — GRADIENT DESCENT, IN YOUR BROWSER ═══════════
+// A real 2-8-8-1 MLP (tanh hidden layers, sigmoid output) trained by stochastic
+// gradient descent on a 2-D toy dataset. The coloured surface is the model's own
+// decision boundary, recomputed every frame. No libraries — just the math.
 (function () {
+  var canvas = document.getElementById('nn-canvas');
+  var consoleEl = document.getElementById('nn-console');
+  if (!canvas || !consoleEl) return;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (typeof THREE === 'undefined' || reduced) return;
-  var canvas = document.getElementById('bg3d');
-  if (!canvas) return;
-  var renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true }); }
-  catch (err) { return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
 
-  var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(0, 0, 9);
-
-  function accent() { return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#a32a4e'; }
-  function muted() { return getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#4a282d'; }
-
-  var world = new THREE.Group();
-  scene.add(world);
-
-  // Wireframe globe
-  var globeMat = new THREE.MeshBasicMaterial({ color: accent(), wireframe: true, transparent: true, opacity: 0.26 });
-  world.add(new THREE.Mesh(new THREE.IcosahedronGeometry(2.3, 2), globeMat));
-
-  // Surface points (data swarm)
-  var pts = [];
-  var spherePos = new THREE.SphereGeometry(2.32, 28, 20).attributes.position;
-  for (var i = 0; i < spherePos.count; i += 2) {
-    pts.push(spherePos.getX(i), spherePos.getY(i), spherePos.getZ(i));
+  // ── theme colours ──
+  var COL = { bg: '#fcf1f3', accent: '#a32a4e', classB: '#5c7a96', muted: '#4a282d' };
+  var PAL = { a: [163, 42, 78], b: [92, 122, 150], bg: [252, 241, 243], m: [74, 40, 45] };
+  function hexToRgb(h) {
+    var m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(h || '').trim());
+    if (!m) return [136, 136, 136];
+    var s = m[1];
+    if (s.length === 3) s = s[0] + s[0] + s[1] + s[1] + s[2] + s[2];
+    var n = parseInt(s, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
   }
-  var pGeo = new THREE.BufferGeometry();
-  pGeo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
-  var pMat = new THREE.PointsMaterial({ color: accent(), size: 0.035, transparent: true, opacity: 0.7 });
-  world.add(new THREE.Points(pGeo, pMat));
-
-  // Orbit rings + satellites
-  var satellites = [];
-  var ringDefs = [
-    { r: 3.1, tilt: [0.5, 0.0, 0.35], speed: 0.55, size: 0.09 },
-    { r: 3.7, tilt: [-0.9, 0.2, -0.25], speed: -0.38, size: 0.07 },
-    { r: 4.3, tilt: [1.25, 0.0, 0.75], speed: 0.26, size: 0.06 }
-  ];
-  ringDefs.forEach(function (d) {
-    var ringPts = [];
-    for (var j = 0; j < 120; j++) {
-      var a = (j / 120) * Math.PI * 2;
-      ringPts.push(new THREE.Vector3(Math.cos(a) * d.r, 0, Math.sin(a) * d.r));
-    }
-    var ring = new THREE.LineLoop(
-      new THREE.BufferGeometry().setFromPoints(ringPts),
-      new THREE.LineBasicMaterial({ color: muted(), transparent: true, opacity: 0.2 })
-    );
-    ring.rotation.set(d.tilt[0], d.tilt[1], d.tilt[2]);
-    world.add(ring);
-    var sat = new THREE.Mesh(
-      new THREE.SphereGeometry(d.size, 12, 12),
-      new THREE.MeshBasicMaterial({ color: accent() })
-    );
-    world.add(sat);
-    d.mesh = sat;
-    d.angle = Math.random() * Math.PI * 2;
-    d.euler = new THREE.Euler(d.tilt[0], d.tilt[1], d.tilt[2]);
-    satellites.push(d);
-  });
-
-  // Starfield
-  var starArr = [];
-  for (var k = 0; k < 700; k++) {
-    var r = 14 + Math.random() * 22;
-    var t = Math.random() * Math.PI * 2;
-    var ph = Math.acos(2 * Math.random() - 1);
-    starArr.push(r * Math.sin(ph) * Math.cos(t), r * Math.sin(ph) * Math.sin(t), r * Math.cos(ph));
+  function rgba(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
+  function readTheme() {
+    var cs = getComputedStyle(document.documentElement);
+    function px(name, fb) { var v = cs.getPropertyValue(name); return (v && v.trim()) || fb; }
+    COL.bg = px('--surface', COL.bg);
+    COL.accent = px('--accent', COL.accent);
+    COL.classB = px('--class-b', COL.classB);
+    COL.muted = px('--muted', COL.muted);
+    PAL.a = hexToRgb(COL.accent); PAL.b = hexToRgb(COL.classB);
+    PAL.bg = hexToRgb(COL.bg); PAL.m = hexToRgb(COL.muted);
   }
-  var sGeo = new THREE.BufferGeometry();
-  sGeo.setAttribute('position', new THREE.Float32BufferAttribute(starArr, 3));
-  var sMat = new THREE.PointsMaterial({ color: muted(), size: 0.05, transparent: true, opacity: 0.45 });
-  scene.add(new THREE.Points(sGeo, sMat));
+  readTheme();
+  window.addEventListener('themechange', readTheme);
 
-  function placeWorld() { world.position.x = window.innerWidth < 768 ? 0 : 2.6; }
-  placeWorld();
-
-  // ── Interaction state ──
-  var mouseX = 0, mouseY = 0, targetRX = 0, targetRY = 0, dragRX = 0, dragRY = 0;
-  var dragging = false, lastX = 0, lastY = 0, scrollRot = 0;
-
-  window.addEventListener('mousemove', function (e) {
-    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-    mouseY = (e.clientY / window.innerHeight) * 2 - 1;
-    if (dragging) {
-      dragRY += (e.clientX - lastX) * 0.005;
-      dragRX += (e.clientY - lastY) * 0.005;
-      lastX = e.clientX; lastY = e.clientY;
+  // ── the network: 2 → 24 → 16 → 1 ──
+  var SIZES = [2, 24, 16, 1];
+  var W = [], B = [];
+  function initNet() {
+    W = []; B = [];
+    for (var l = 0; l < SIZES.length - 1; l++) {
+      var wl = [], bl = [], sc = Math.sqrt(1.7 / SIZES[l]);
+      for (var j = 0; j < SIZES[l + 1]; j++) {
+        var row = [];
+        for (var i = 0; i < SIZES[l]; i++) row.push((Math.random() * 2 - 1) * sc);
+        wl.push(row); bl.push(0);
+      }
+      W.push(wl); B.push(bl);
     }
-  });
-  window.addEventListener('mousedown', function (e) {
-    if (e.target.closest && e.target.closest('a, button, input, textarea, nav, .project-card, .contact-link, .stat-grid, .pub-card, .exp-item, .skill-group')) return;
-    dragging = true; lastX = e.clientX; lastY = e.clientY;
-  });
-  window.addEventListener('mouseup', function () { dragging = false; });
+  }
 
-  window.addEventListener('scroll', function () {
-    scrollRot = window.scrollY * 0.0012;
-    canvas.style.opacity = String(Math.max(0.16, 1 - (window.scrollY / window.innerHeight) * 0.85));
-  }, { passive: true });
+  function forward(x, y) {
+    var a = [x, y];
+    for (var l = 0; l < W.length; l++) {
+      var out = [];
+      for (var j = 0; j < W[l].length; j++) {
+        var z = B[l][j], row = W[l][j];
+        for (var i = 0; i < a.length; i++) z += row[i] * a[i];
+        out.push(l === W.length - 1 ? 1 / (1 + Math.exp(-z)) : Math.tanh(z));
+      }
+      a = out;
+    }
+    return a[0]; // P(class 1)
+  }
 
-  window.addEventListener('resize', function () {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    placeWorld();
+  function trainStep(pt, lr) {
+    var acts = [[pt.x, pt.y]], l, i, j;
+    for (l = 0; l < W.length; l++) {
+      var out = [];
+      for (j = 0; j < W[l].length; j++) {
+        var z = B[l][j], row = W[l][j], av = acts[l];
+        for (i = 0; i < av.length; i++) z += row[i] * av[i];
+        out.push(l === W.length - 1 ? 1 / (1 + Math.exp(-z)) : Math.tanh(z));
+      }
+      acts.push(out);
+    }
+    var p = acts[acts.length - 1][0];
+    var delta = [p - pt.label]; // dL/dz for sigmoid + binary cross-entropy
+    for (l = W.length - 1; l >= 0; l--) {
+      var aPrev = acts[l], back = null;
+      if (l > 0) {
+        back = [];
+        for (i = 0; i < aPrev.length; i++) {
+          var s = 0;
+          for (j = 0; j < W[l].length; j++) s += W[l][j][i] * delta[j];
+          var h = aPrev[i];
+          back.push(s * (1 - h * h));
+        }
+      }
+      for (j = 0; j < W[l].length; j++) {
+        var dg = delta[j];
+        for (i = 0; i < aPrev.length; i++) W[l][j][i] -= lr * dg * aPrev[i];
+        B[l][j] -= lr * dg;
+      }
+      if (back) delta = back;
+    }
+    return p;
+  }
+
+  // ── toy datasets, points in [-1,1]² ──
+  var DATA = [];
+  function gauss() {
+    var u = 0, v = 0;
+    while (!u) u = Math.random();
+    while (!v) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+  function addPt(x, y, label) { DATA.push({ x: x, y: y, label: label }); }
+  function genData(kind) {
+    DATA = [];
+    var n = 70, i, t, r, cl;
+    if (kind === 'rings') {
+      for (i = 0; i < n; i++) { t = Math.random() * 2 * Math.PI; r = 0.2 + Math.abs(gauss()) * 0.07; addPt(r * Math.cos(t), r * Math.sin(t), 1); }
+      for (i = 0; i < n; i++) { t = Math.random() * 2 * Math.PI; r = 0.78 + Math.abs(gauss()) * 0.07; addPt(r * Math.cos(t), r * Math.sin(t), 0); }
+    } else if (kind === 'xor') {
+      for (i = 0; i < 2 * n; i++) {
+        var x = Math.random() * 1.7 - 0.85, y = Math.random() * 1.7 - 0.85;
+        if (Math.abs(x) < 0.07) x += x < 0 ? -0.07 : 0.07;
+        if (Math.abs(y) < 0.07) y += y < 0 ? -0.07 : 0.07;
+        addPt(x, y, x * y > 0 ? 1 : 0);
+      }
+    } else if (kind === 'moons') {
+      for (i = 0; i < n; i++) { t = Math.PI * i / n; addPt((Math.cos(t) - 0.5) * 0.95 + gauss() * 0.04, (Math.sin(t) - 0.25) * 0.95 + gauss() * 0.04, 1); }
+      for (i = 0; i < n; i++) { t = Math.PI * i / n; addPt((0.5 - Math.cos(t)) * 0.95 + gauss() * 0.04, (0.5 - Math.sin(t)) * 0.95 + gauss() * 0.04, 0); }
+    } else { // spiral
+      for (cl = 0; cl < 2; cl++)
+        for (i = 0; i < n; i++) {
+          r = 0.08 + 0.82 * i / n;
+          t = 1.75 * (i / n) * 2 * Math.PI + cl * Math.PI;
+          addPt(r * Math.sin(t) + gauss() * 0.035, r * Math.cos(t) + gauss() * 0.035, cl);
+        }
+    }
+  }
+
+  // ── training bookkeeping ──
+  var LR = 0.03, EPOCHS_PER_FRAME = 2;
+  var epoch = 0, lossEMA = null, lossHist = [], acc = 0;
+  function resetStats() { epoch = 0; lossEMA = null; lossHist = []; acc = 0; }
+  function trainEpochs(k) {
+    var N = DATA.length; if (!N) return;
+    for (var e = 0; e < k; e++) {
+      var i, j, t;
+      for (i = N - 1; i > 0; i--) { j = (Math.random() * (i + 1)) | 0; t = DATA[i]; DATA[i] = DATA[j]; DATA[j] = t; }
+      var loss = 0;
+      for (var s = 0; s < N; s++) {
+        var p = trainStep(DATA[s], LR), y = DATA[s].label;
+        loss += -(y ? Math.log(p + 1e-9) : Math.log(1 - p + 1e-9));
+      }
+      epoch++; loss /= N;
+      lossEMA = lossEMA == null ? loss : lossEMA * 0.85 + loss * 0.15;
+      lossHist.push(lossEMA); if (lossHist.length > 140) lossHist.shift();
+      var ok = 0;
+      for (var q = 0; q < N; q++) if ((forward(DATA[q].x, DATA[q].y) > 0.5) === (DATA[q].label === 1)) ok++;
+      acc = ok / N;
+    }
+  }
+
+  // ── rendering ──
+  var ctx = canvas.getContext('2d');
+  var RES = 72, off = document.createElement('canvas');
+  off.width = RES; off.height = RES;
+  var offCtx = off.getContext('2d');
+  var img = offCtx.createImageData(RES, RES);
+  var Wc = 300, Hc = 200;
+  function resize() {
+    var r = canvas.getBoundingClientRect();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    Wc = Math.max(220, Math.round(r.width));
+    Hc = Math.max(180, Math.round(r.height));
+    canvas.width = Math.round(Wc * dpr);
+    canvas.height = Math.round(Hc * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function half() { return Math.min(Wc, Hc) / 2 * 0.94; }
+
+  function draw() {
+    var hf = half(), cx = Wc / 2, cy = Hc / 2, k, q;
+    ctx.fillStyle = COL.bg;
+    ctx.fillRect(0, 0, Wc, Hc);
+    // decision surface — the model's own opinion of the plane, smoothed up from 72×72
+    var d = img.data, cell = 0;
+    for (var gy = 0; gy < RES; gy++) {
+      var wy = 1 - 2 * (gy + 0.5) / RES;
+      for (var gx = 0; gx < RES; gx++) {
+        var wx = 2 * (gx + 0.5) / RES - 1;
+        var pv = forward(wx, wy);
+        var t = Math.pow(Math.abs(pv - 0.5) * 2, 0.65) * 0.36;
+        var c = pv > 0.5 ? PAL.a : PAL.b;
+        var idx = cell++ * 4;
+        d[idx] = PAL.bg[0] + (c[0] - PAL.bg[0]) * t;
+        d[idx + 1] = PAL.bg[1] + (c[1] - PAL.bg[1]) * t;
+        d[idx + 2] = PAL.bg[2] + (c[2] - PAL.bg[2]) * t;
+        d[idx + 3] = 255;
+      }
+    }
+    offCtx.putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(off, cx - hf, cy - hf, hf * 2, hf * 2);
+    // math-paper grid
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = rgba(PAL.m, 0.08);
+    ctx.beginPath();
+    for (var g = -1; g <= 1.001; g += 0.25) {
+      ctx.moveTo(cx + g * hf, cy - hf); ctx.lineTo(cx + g * hf, cy + hf);
+      ctx.moveTo(cx - hf, cy + g * hf); ctx.lineTo(cx + hf, cy + g * hf);
+    }
+    ctx.stroke();
+    ctx.strokeStyle = rgba(PAL.m, 0.18);
+    ctx.beginPath();
+    ctx.moveTo(cx - hf, cy); ctx.lineTo(cx + hf, cy);
+    ctx.moveTo(cx, cy - hf); ctx.lineTo(cx, cy + hf);
+    ctx.stroke();
+    // data points
+    for (k = 0; k < DATA.length; k++) {
+      var pt = DATA[k];
+      ctx.beginPath();
+      ctx.arc(cx + pt.x * hf, cy - pt.y * hf, 3.4, 0, 2 * Math.PI);
+      ctx.fillStyle = pt.label === 1 ? COL.accent : COL.classB;
+      ctx.fill();
+      ctx.lineWidth = 1.4;
+      ctx.strokeStyle = COL.bg;
+      ctx.stroke();
+    }
+    // loss sparkline
+    if (lossHist.length > 2) {
+      var sw = Math.min(170, Wc * 0.34), sh = 34, mx = 14, my = 14;
+      var x0 = Wc - sw - mx, y0 = my, lo = Infinity, hi = -Infinity;
+      for (q = 0; q < lossHist.length; q++) { if (lossHist[q] < lo) lo = lossHist[q]; if (lossHist[q] > hi) hi = lossHist[q]; }
+      if (hi - lo < 1e-6) hi = lo + 1e-6;
+      ctx.beginPath();
+      for (q = 0; q < lossHist.length; q++) {
+        var xx = x0 + (q / (lossHist.length - 1)) * sw;
+        var yy = y0 + sh - ((lossHist[q] - lo) / (hi - lo)) * sh;
+        if (q === 0) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy);
+      }
+      ctx.strokeStyle = rgba(PAL.a, 0.9);
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.strokeStyle = rgba(PAL.m, 0.25);
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x0, y0, sw, sh);
+      ctx.fillStyle = rgba(PAL.m, 0.75);
+      ctx.font = '9px "DM Mono", monospace';
+      ctx.fillText('loss', x0 + 4, y0 + 11);
+    }
+  }
+
+  // ── header readout ──
+  var epochEl = document.getElementById('nn-epoch');
+  var lossEl = document.getElementById('nn-loss');
+  var accEl = document.getElementById('nn-acc');
+  function readout() {
+    if (epochEl) epochEl.textContent = 'epoch ' + epoch;
+    if (lossEl) lossEl.textContent = lossEMA == null ? '—' : lossEMA.toFixed(3);
+    if (accEl) accEl.textContent = (acc * 100).toFixed(1) + '%';
+  }
+
+  // ── interaction: click to add training data, watch the boundary move ──
+  canvas.addEventListener('pointerdown', function (e) {
+    var r = canvas.getBoundingClientRect(), hf = half();
+    var wx = (e.clientX - r.left - Wc / 2) / hf;
+    var wy = (Hc / 2 - (e.clientY - r.top)) / hf;
+    if (wx < -1 || wx > 1 || wy < -1 || wy > 1) return;
+    addPt(wx, wy, e.shiftKey ? 0 : 1);
+    trainEpochs(reduced ? 6 : 3);
+    draw(); readout();
   });
 
-  window.addEventListener('themechange', function () {
-    var a = accent(), m = muted();
-    globeMat.color.set(a); pMat.color.set(a); sMat.color.set(m);
-    satellites.forEach(function (s) { s.mesh.material.color.set(a); });
-  });
-
-  var clock = new THREE.Clock();
-  (function animate() {
-    requestAnimationFrame(animate);
-    if (document.hidden) return;
-    var t = clock.getElapsedTime();
-    targetRY = mouseX * 0.35 + dragRY + t * 0.06 + scrollRot;
-    targetRX = mouseY * 0.22 + dragRX;
-    world.rotation.y += (targetRY - world.rotation.y) * 0.05;
-    world.rotation.x += (targetRX - world.rotation.x) * 0.05;
-    satellites.forEach(function (s) {
-      s.angle += s.speed * 0.016;
-      s.mesh.position.set(Math.cos(s.angle) * s.r, 0, Math.sin(s.angle) * s.r).applyEuler(s.euler);
+  var dsBtns = Array.prototype.slice.call(consoleEl.querySelectorAll('.nn-btn[data-ds]'));
+  var pauseBtn = document.getElementById('nn-pause');
+  var resetBtn = document.getElementById('nn-reset');
+  var running = !reduced;
+  dsBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      dsBtns.forEach(function (o) { o.classList.toggle('active', o === b); });
+      genData(b.getAttribute('data-ds'));
+      initNet(); resetStats();
+      if (reduced) trainEpochs(80);
+      draw(); readout();
     });
-    camera.position.x += ((mouseX * 0.4) - camera.position.x) * 0.03;
-    camera.position.y += ((-mouseY * 0.3) - camera.position.y) * 0.03;
-    camera.lookAt(world.position.x * 0.6, 0, 0);
-    renderer.render(scene, camera);
-  })();
-})();
+  });
+  if (pauseBtn) pauseBtn.addEventListener('click', function () {
+    running = !running;
+    pauseBtn.textContent = running ? '⏸ pause' : '▶ run';
+  });
+  if (resetBtn) resetBtn.addEventListener('click', function () {
+    initNet(); resetStats();
+    if (reduced) trainEpochs(80);
+    draw(); readout();
+  });
 
+  // ── loop — idles when the tab is hidden or the console is scrolled away ──
+  var inView = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { inView = en[0].isIntersecting; }, { threshold: 0.05 }).observe(consoleEl);
+  }
+  var frame = 0;
+  (function loop() {
+    requestAnimationFrame(loop);
+    if (document.hidden || !inView) return;
+    if (running) trainEpochs(EPOCHS_PER_FRAME);
+    draw();
+    if (frame++ % 10 === 0) readout();
+  })();
+
+  window.addEventListener('resize', function () { resize(); draw(); });
+
+  // ── boot ──
+  resize();
+  genData('spiral');
+  initNet();
+  if (reduced) { running = false; if (pauseBtn) pauseBtn.textContent = '▶ run'; trainEpochs(80); }
+  draw();
+  readout();
+})();
 </script>
 
 <script>
