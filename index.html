@@ -140,6 +140,8 @@ nav.scrolled {
   margin: 0 auto;
   width: 100%;
 }
+/* prevent grid min-content blowout on narrow viewports */
+.hero-grid > * { min-width: 0; }
 .hero-left { position: relative; }
 .hero-eyebrow {
   font-family: var(--font-mono);
@@ -226,7 +228,7 @@ nav.scrolled {
 }
 .stat-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -234,6 +236,7 @@ nav.scrolled {
 .stat-cell {
   background: var(--surface);
   padding: 1.8rem;
+  min-width: 0;
   transition: background 0.3s;
 }
 .stat-cell:hover { background: var(--surface2); }
@@ -509,6 +512,18 @@ section {
   cursor: default;
 }
 .skill-pill:hover { border-color: var(--accent); color: var(--text); background: var(--surface2); }
+.skill-run canvas { display: block; width: 100%; height: 150px; }
+.run-readout {
+  margin-top: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.run-readout strong { color: var(--accent); font-weight: 400; }
+.run-readout span { opacity: 0.85; }
+@media (min-width: 971px) { .skill-run { grid-column: span 2; } }
 
 /* ── PROJECTS ── */
 .projects-grid {
@@ -718,6 +733,7 @@ section {
   gap: 3rem;
   align-items: start;
 }
+.contact-grid > * { min-width: 0; }
 .contact-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
 .contact-link {
   display: flex;
@@ -752,6 +768,7 @@ section {
   font-size: 1rem;
   color: var(--text);
   margin-top: 0.2rem;
+  overflow-wrap: anywhere;
 }
 .contact-right p {
   font-size: 1.1rem;
@@ -828,19 +845,19 @@ footer {
 .nn-intro-label b { color: var(--accent); font-weight: 400; }
 .nn-intro-title {
   font-family: var(--font-display);
-  font-size: clamp(2.1rem, 4.4vw, 3.3rem);
+  font-size: clamp(1.55rem, 2.55vw, 2.3rem);
   font-weight: 300;
   color: var(--text);
-  margin: 0.45rem 0 0.6rem;
-  line-height: 1.05;
+  width: 100vw;
+  margin: 0.45rem 0 0.6rem -4rem;
+  padding: 0 1.6rem;
+  line-height: 1.2;
 }
 .nn-intro-title em { font-style: italic; color: var(--accent); }
-.nn-intro-sub {
-  max-width: 640px;
-  margin: 0 auto;
-  font-size: 0.97rem;
-  line-height: 1.75;
-  color: var(--muted);
+@media (min-width: 769px) {
+  @supports (text-align-last: justify) {
+    .nn-intro-title { text-align: justify; text-align-last: justify; }
+  }
 }
 .nn-console { position: relative; margin-top: 0.8rem; flex: 0 0 100%; width: 100%; }
 #nn-canvas {
@@ -932,7 +949,9 @@ footer {
 }
 
 /* ── 3-D ENGRAVED BACKGROUNDS — ink scenes behind sections ── */
-#skills, #contact { position: relative; }
+#skills, #contact, #about, #experience, #projects, #certifications, #publications { position: relative; }
+#about > :not(.bg-viz), #experience > :not(.bg-viz), #projects > :not(.bg-viz),
+#certifications > :not(.bg-viz), #publications > :not(.bg-viz),
 #skills > .reveal, #skills > .skills-grid,
 #contact > .reveal, #contact > .contact-grid { position: relative; z-index: 1; }
 .bg-viz {
@@ -942,11 +961,16 @@ footer {
   height: 100%;
   pointer-events: none;
   z-index: 0;
+  opacity: 0.4;
 }
-.bg-viz-top { inset: 0 0 auto 0; height: 480px; }
+[data-theme="dark"] .bg-viz { opacity: 0.55; }
+.bg-viz-top { inset: 0 0 auto 0; height: 560px; }
 @media (max-width: 768px) {
-  .nn-intro-title { font-size: 2.05rem; }
-  .nn-intro-sub { font-size: 0.9rem; padding: 0 0.4rem; }
+  .bg-viz-top { height: 300px; opacity: 0.32; }
+  [data-theme="dark"] .bg-viz-top { opacity: 0.45; }
+}
+@media (max-width: 768px) {
+  .nn-intro-title { font-size: 1.8rem; line-height: 1.3; padding: 0 1.1rem; }
   .footer-signature { font-size: 3.4rem; }
 }
 
@@ -1181,6 +1205,8 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
   section { padding: 2.5rem 1.5rem; }
   #hero { padding: 5rem 1.5rem 2rem; }
   .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .stat-num { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+  .stat-cell { padding: 1.1rem 0.9rem; }
   .hero-name { font-size: clamp(2.5rem, 8vw, 3.5rem); }
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .exp-item { grid-template-columns: 1fr; gap: 1rem; }
@@ -1263,8 +1289,7 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
   <div class="nn-intro reveal">
     <div class="nn-intro-label">gradient descent · a neural network, from scratch — <b>training live in your browser</b></div>
-    <h2 class="nn-intro-title">What is <em>life?</em></h2>
-    <p class="nn-intro-sub">Start wrong. Measure exactly how wrong you are. Take one small step toward less wrong. Repeat ten thousand times. That is all the network below is doing — learning to read the spiral, one correction at a time. Click anywhere on the surface to hand it a new point, and watch it re-learn.</p>
+    <h2 class="nn-intro-title">A neural network, training <em>live</em> — one gradient step at a time.</h2>
   </div>
   <div class="nn-console reveal" id="nn-console" aria-label="Live neural network demo">
     <canvas id="nn-canvas" role="img" aria-label="A small neural network training live in the browser: an evolving decision boundary separating two classes of points"></canvas>
@@ -1292,6 +1317,7 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
 <!-- ABOUT -->
 <section id="about" style="max-width:1200px; margin:0 auto;">
+  <canvas class="bg-viz" id="bg-attn" aria-hidden="true"></canvas>
   <div class="reveal">
     <div class="section-label">01 / About</div>
     <h2 class="section-title">The gap between<br><em>predicting and understanding</em></h2>
@@ -1329,6 +1355,7 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
 <!-- EXPERIENCE -->
 <section id="experience" style="max-width:1200px; margin:0 auto;">
+  <canvas class="bg-viz" id="bg-desc" aria-hidden="true"></canvas>
   <div class="reveal">
     <div class="section-label">02 / Experience</div>
     <h2 class="section-title">Where I've<br><em style="color: var(--accent);">worked</em></h2>
@@ -1535,6 +1562,11 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
         <span class="skill-pill">Documentation</span>
       </div>
     </div>
+    <div class="skill-group skill-run" id="run-cell">
+      <div class="skill-group-label">Live training run</div>
+      <canvas id="run-chart" role="img" aria-label="Live training curve: a small logistic-regression model learning to separate two rings, its loss descending in real time"></canvas>
+      <div class="run-readout"><strong id="run-epoch">epoch 0</strong> · loss <strong id="run-loss">—</strong> · <span id="run-tag">run #1 · logistic regression · rings</span></div>
+    </div>
   </div>
 </section>
 
@@ -1542,6 +1574,7 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
 <!-- PROJECTS -->
 <section id="projects" style="max-width:1200px; margin:0 auto;">
+  <canvas class="bg-viz" id="bg-tsne" aria-hidden="true"></canvas>
   <div class="reveal">
     <div class="section-label">04 / ML Projects</div>
     <h2 class="section-title">Models, pipelines &amp;<br><em>things I've built</em></h2>
@@ -1672,6 +1705,7 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
 <!-- CERTIFICATIONS -->
 <section id="certifications" style="max-width:1200px; margin:0 auto;">
+  <canvas class="bg-viz" id="bg-roc" aria-hidden="true"></canvas>
   <div class="reveal">
     <div class="section-label">05 / Certifications</div>
     <h2 class="section-title">Credentials &amp;<br><em>learning</em></h2>
@@ -1697,6 +1731,7 @@ a.project-tag:hover { color: var(--accent); border-color: var(--accent); }
 
 <!-- PUBLICATIONS -->
 <section id="publications" style="max-width:1200px; margin:0 auto;">
+  <canvas class="bg-viz" id="bg-cite" aria-hidden="true"></canvas>
   <div class="reveal">
     <div class="section-label">06 / Publications</div>
     <h2 class="section-title">Research &amp;<br><em>writing</em></h2>
@@ -2275,10 +2310,11 @@ reveals.forEach(el => observer.observe(el));
 </script>
 
 <script>
-// ═══════════ 3-D ENGRAVED BACKGROUNDS — loss landscape (skills) + converging flow (contact) ═══════════
-// Pseudo-3D ink scenes drawn straight onto the page: a slowly turning loss
-// landscape with a ball descending it by gradient descent, and a flow field
-// where every stream converges on one minimum. No libraries — projection math.
+// ═══════════ 3-D ENGRAVED BACKGROUNDS — seven ML ink scenes behind the sections ═══════════
+// hero: live-trained network (its own script) · about: attention map · experience: optimizers
+// on a topographic bowl · skills: turning loss landscape · projects: t-SNE clusters ·
+// certifications: ROC family · publications: citation graph · contact: converging flow.
+// No libraries — projection math and canvas 2-D.
 (function () {
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function rgba(hex, a) {
@@ -2332,7 +2368,7 @@ reveals.forEach(el => observer.observe(el));
   }
   // ── skills: the loss landscape, and a ball learning to descend it ──
   makeViz('bg-loss', 'skills', function (ctx, S, pal) {
-    var N = 22, COLS = 52;
+    var N = 24, COLS = 52;
     function loss(u, v) {
       return (u * u + v * v) * 0.42
         + Math.exp(-4.2 * ((u - 0.62) * (u - 0.62) + (v - 0.5) * (v - 0.5)))
@@ -2360,32 +2396,39 @@ reveals.forEach(el => observer.observe(el));
       if (ball.trail.length > 110) ball.trail.shift();
       if (ball.still > 40 || Math.abs(ball.u) > 1.05 || Math.abs(ball.v) > 1.05) respawn();
     }
-    function Z(u, v) { return loss(u, v) * 0.6 - 0.3; }
+    function Z(u, v) { return loss(u, v) * 0.8 - 0.38; }
     function scene(yaw) {
-      var w = S.w, h = S.h, f = Math.min(w * 0.55, 760);
-      var P = projector(yaw, -0.45, 3.4, 0.36), i, j, u, v, p;
+      var w = S.w, h = S.h, mob = w < 700;
+      var f = Math.min(w * (mob ? 0.5 : 0.68), 900);
+      var P = projector(yaw, -0.5, 3.4, mob ? 0.34 : 0.235), i, j, u, v, p;
       ctx.clearRect(0, 0, w, h);
       var palv = pal();
       ctx.lineWidth = 1;
-      ctx.strokeStyle = rgba(palv.ink, 0.15);
+      function inkAt(d) { return Math.max(0.2, Math.min(0.55, 0.68 - (d - 2.9) * 0.4)); }
       for (j = 0; j <= N; j++) {                       // rows
         v = -1 + 2 * j / N;
+        var dMid = 0;
         ctx.beginPath();
         for (i = 0; i <= COLS; i++) {
           u = -1 + 2 * i / COLS;
           p = P(u, v, Z(u, v), w, h, f);
+          if (i === (COLS >> 1)) dMid = p[2];
           if (i) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]);
         }
+        ctx.strokeStyle = rgba(palv.ink, inkAt(dMid));
         ctx.stroke();
       }
       for (i = 0; i <= N; i++) {                       // columns
         u = -1 + 2 * i / N;
+        var dMid2 = 0;
         ctx.beginPath();
         for (j = 0; j <= COLS; j++) {
           v = -1 + 2 * j / COLS;
           p = P(u, v, Z(u, v), w, h, f);
+          if (j === (COLS >> 1)) dMid2 = p[2];
           if (j) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]);
         }
+        ctx.strokeStyle = rgba(palv.ink, inkAt(dMid2));
         ctx.stroke();
       }
       // the descent — the only accent in the engraving
@@ -2401,14 +2444,16 @@ reveals.forEach(el => observer.observe(el));
             p = P(T[i][0], T[i][1], Z(T[i][0], T[i][1]), w, h, f);
             if (i === from) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
           }
-          ctx.strokeStyle = rgba(palv.accent, c === 0 ? 0.16 : c === 1 ? 0.38 : 0.85);
-          ctx.lineWidth = c === 2 ? 1.6 : 1.1;
+          ctx.strokeStyle = rgba(palv.accent, c === 0 ? 0.4 : c === 1 ? 0.68 : 1);
+          ctx.lineWidth = c === 2 ? 2.2 : 1.3;
           ctx.stroke();
         }
       }
       var bp = P(ball.u, ball.v, Z(ball.u, ball.v), w, h, f);
-      ctx.beginPath(); ctx.arc(bp[0], bp[1], 3, 0, 2 * Math.PI);
-      ctx.fillStyle = rgba(palv.accent, 0.9); ctx.fill();
+      ctx.beginPath(); ctx.arc(bp[0], bp[1], 13, 0, 2 * Math.PI);
+      ctx.fillStyle = rgba(palv.accent, 0.22); ctx.fill();
+      ctx.beginPath(); ctx.arc(bp[0], bp[1], 5, 0, 2 * Math.PI);
+      ctx.fillStyle = rgba(palv.accent, 0.95); ctx.fill();
     }
     return {
       frame: function () {
@@ -2424,7 +2469,7 @@ reveals.forEach(el => observer.observe(el));
   });
   // ── contact: a flow field where every stream finds the same minimum ──
   makeViz('bg-flow', 'contact', function (ctx, S, pal) {
-    var NP = 110, MIN = { u: 0.08, v: 0.04 }, parts = [], i;
+    var NP = 150, MIN = { u: 0.08, v: 0.04 }, parts = [], i;
     function field(u, v) {
       var du = MIN.u - u, dv = MIN.v - v;
       var d = Math.sqrt(du * du + dv * dv) + 0.06;
@@ -2441,13 +2486,13 @@ reveals.forEach(el => observer.observe(el));
     function paint(advance) {
       var w = S.w, h = S.h, f = Math.min(w, h) * 1.12, palv = pal();
       if (advance) { ctx.fillStyle = rgba(palv.bg, 0.07); ctx.fillRect(0, 0, w, h); }
-      ctx.lineWidth = 1.1;
+      ctx.lineWidth = 1.3;
       for (var k = 0; k < NP; k++) {
         var q = parts[k], F = field(q.u, q.v);
         var nu = q.u + F[0] * 0.008, nv = q.v + F[1] * 0.008;
         var a = P(q.u, q.v, 0, w, h, f), b = P(nu, nv, 0, w, h, f);
         var depth = Math.max(0, Math.min(1, (4.1 - b[2]) / 1.5));
-        ctx.strokeStyle = rgba(palv.ink, 0.06 + depth * 0.17);
+        ctx.strokeStyle = rgba(palv.ink, 0.11 + depth * 0.28);
         ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
         if (advance) {
           q.u = nu; q.v = nv;
@@ -2456,14 +2501,400 @@ reveals.forEach(el => observer.observe(el));
         }
       }
       var m = P(MIN.u, MIN.v, 0, w, h, f);
-      ctx.beginPath(); ctx.arc(m[0], m[1], 2.6, 0, 2 * Math.PI);
-      ctx.fillStyle = rgba(palv.accent, 0.85); ctx.fill();
+      ctx.beginPath(); ctx.arc(m[0], m[1], 8, 0, 2 * Math.PI);
+      ctx.fillStyle = rgba(palv.accent, 0.14); ctx.fill();
+      ctx.beginPath(); ctx.arc(m[0], m[1], 3.2, 0, 2 * Math.PI);
+      ctx.fillStyle = rgba(palv.accent, 0.9); ctx.fill();
     }
     return {
       frame: function () { paint(true); },
       static: function () { for (var k = 0; k < 500; k++) paint(true); }
     };
   });
+  // ── about: a transformer's attention map — queries sweeping a token grid ──
+  makeViz('bg-attn', 'about', function (ctx, S, pal) {
+    var N = 13, W = [], i, j;
+    for (i = 0; i < N; i++) {
+      W.push([]);
+      for (j = 0; j < N; j++) {
+        var d = Math.abs(i - j);
+        W[i].push(Math.exp(-d * 0.34) + (Math.random() < 0.13 ? 0.8 + Math.random() * 0.8 : 0) + Math.random() * 0.12);
+      }
+    }
+    var q = 4, qn = 9, fade = 1, t = Math.random() * 9;
+    function draw(qry, glow) {
+      var w = S.w, h = S.h, palv = pal();
+      var side = Math.min(w * 0.8, h * 0.82, 540), cell = side / N;
+      var x0 = (w - side) / 2, y0 = (h - side) / 2, breath = 0.82 + 0.18 * Math.sin(t * 0.5);
+      var r, c;
+      for (r = 0; r < N; r++) for (c = 0; c < N; c++) {
+        var v = W[r][c] * (r === qry ? 1.7 : 0.5);
+        ctx.fillStyle = rgba(palv.ink, Math.min(0.5, v * 0.17 * breath));
+        ctx.fillRect(x0 + c * cell + 1, y0 + r * cell + 1, cell - 2, cell - 2);
+      }
+      var best = 0;
+      for (c = 1; c < N; c++) if (W[qry][c] > W[qry][best]) best = c;
+      ctx.strokeStyle = rgba(palv.accent, glow);
+      ctx.lineWidth = 1.4;
+      ctx.strokeRect(x0 - 5, y0 + qry * cell - 5, side + 10, cell + 10);
+      ctx.fillStyle = rgba(palv.accent, Math.min(1, glow + 0.15));
+      ctx.fillRect(x0 + best * cell + 1, y0 + qry * cell + 1, cell - 2, cell - 2);
+    }
+    return {
+      frame: function () {
+        t += 0.016;
+        fade += (1 - fade) * 0.04;
+        if (Math.random() < 0.008) { q = qn; qn = (qn + 2 + (Math.random() * 4 | 0)) % N; fade = 0; }
+        ctx.clearRect(0, 0, S.w, S.h);
+        draw(qn, fade * 0.8);
+        draw(q, 0.35);
+      },
+      static: function () { ctx.clearRect(0, 0, S.w, S.h); draw(q, 0.5); }
+    };
+  });
+  // ── experience: three optimizers racing down the same topographic bowl ──
+  makeViz('bg-desc', 'experience', function (ctx, S, pal) {
+    var M = { u: 0.12, v: 0.06 };
+    function grad(u, v) {
+      return [2 * (u - M.u) - 0.66 * Math.sin(2.2 * u) * Math.cos(1.7 * v),
+              2.8 * (v - M.v) - 0.51 * Math.cos(2.2 * u) * Math.sin(1.7 * v)];
+    }
+    var balls = [
+      { lr: 0.16, m: 0, noise: 0.5, u: -0.8, v: -0.62 },
+      { lr: 0.14, m: 0.86, noise: 0.08, u: 0.78, v: -0.7 },
+      { lr: 0.2, m: 0, noise: 0, u: -0.6, v: 0.66, adam: 1, accent: 1 }
+    ];
+    function reset(b) {
+      var a = Math.random() * 2 * Math.PI;
+      b.u = M.u + Math.cos(a) * (0.75 + Math.random() * 0.3);
+      b.v = M.v + Math.sin(a) * (0.6 + Math.random() * 0.24);
+      b.pu = b.u; b.pv = b.v; b.vx = 0; b.vy = 0;
+    }
+    balls.forEach(reset);
+    function step(b) {
+      var g = grad(b.u, b.v);
+      b.vx = b.m * b.vx - b.lr * (g[0] + (Math.random() - 0.5) * b.noise);
+      b.vy = b.m * b.vy - b.lr * (g[1] + (Math.random() - 0.5) * b.noise);
+      if (b.adam) { var n = Math.sqrt(g[0] * g[0] + g[1] * g[1]) + 1e-6; b.vx = -b.lr * g[0] / n; b.vy = -b.lr * g[1] / n; }
+      b.pu = b.u; b.pv = b.v; b.u += b.vx; b.v += b.vy;
+      if (Math.sqrt((b.u - M.u) * (b.u - M.u) + (b.v - M.v) * (b.v - M.v)) < 0.035 || Math.abs(b.u) > 1.05 || Math.abs(b.v) > 1.05) reset(b);
+    }
+    function contours(palv) {
+      var w = S.w, h = S.h;
+      var cx = w * 0.5 + M.u * w * 0.33, cy = h * 0.52 - M.v * h * 0.33;
+      var R = Math.min(w, h) * 0.46, k, a;
+      for (k = 8; k >= 1; k--) {
+        ctx.beginPath();
+        for (a = 0; a <= 6.3; a += 0.11) {
+          var r = (k / 8) * R * (1 + 0.14 * Math.sin(3 * a + 1.7) + 0.09 * Math.sin(5 * a - 0.6) + 0.05 * Math.sin(2 * a + k));
+          var x = cx + Math.cos(a) * r * 1.25, y = cy + Math.sin(a) * r * 0.78;
+          if (a) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = rgba(palv.ink, 0.1 + (8 - k) * 0.032);
+        ctx.lineWidth = k % 4 === 0 ? 1.4 : 1;
+        ctx.stroke();
+      }
+      return { cx: cx, cy: cy };
+    }
+    function paint(advance) {
+      var w = S.w, h = S.h, palv = pal(), i;
+      if (advance) { ctx.fillStyle = rgba(palv.bg, 0.055); ctx.fillRect(0, 0, w, h); }
+      for (i = 0; i < balls.length; i++) {
+        var b = balls[i];
+        if (advance) step(b);
+        var bx = w * 0.5 + b.pu * w * 0.33, by = h * 0.52 - b.pv * h * 0.33;
+        var ax = w * 0.5 + b.u * w * 0.33, ay = h * 0.52 - b.v * h * 0.33;
+        ctx.strokeStyle = rgba(b.accent ? palv.accent : palv.ink, b.accent ? 0.5 : 0.22);
+        ctx.lineWidth = b.accent ? 1.8 : 1.2;
+        ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ax, ay); ctx.stroke();
+      }
+      var c = contours(palv);
+      ctx.beginPath(); ctx.arc(c.cx, c.cy, 5.5, 0, 2 * Math.PI); ctx.fillStyle = rgba(palv.accent, 0.16); ctx.fill();
+      ctx.beginPath(); ctx.arc(c.cx, c.cy, 2.6, 0, 2 * Math.PI); ctx.fillStyle = rgba(palv.accent, 0.9); ctx.fill();
+      for (i = 0; i < balls.length; i++) {
+        var b2 = balls[i];
+        var px = w * 0.5 + b2.u * w * 0.33, py = h * 0.52 - b2.v * h * 0.33;
+        ctx.beginPath(); ctx.arc(px, py, b2.accent ? 3.4 : 2.6, 0, 2 * Math.PI);
+        ctx.fillStyle = rgba(b2.accent ? palv.accent : palv.ink, b2.accent ? 0.95 : 0.55); ctx.fill();
+      }
+    }
+    return {
+      frame: function () { paint(true); },
+      static: function () { for (var k = 0; k < 420; k++) paint(true); }
+    };
+  });
+  // ── projects: an embedding map — clusters drifting like a t-SNE plot ──
+  makeViz('bg-tsne', 'projects', function (ctx, S, pal) {
+    var CL = [
+      { u: -0.5, v: -0.26, s: 0.3, n: 42, a: 0 },
+      { u: 0.44, v: -0.38, s: 0.24, n: 34, a: 0 },
+      { u: 0.1, v: 0.36, s: 0.28, n: 38, a: 1 },
+      { u: -0.34, v: 0.44, s: 0.19, n: 24, a: 0 },
+      { u: 0.68, v: 0.3, s: 0.15, n: 16, a: 0 }
+    ], pts = [], t = Math.random() * 9;
+    CL.forEach(function (c, ci) {
+      for (var k = 0; k < c.n; k++) {
+        var a = Math.random() * 2 * Math.PI, r = Math.sqrt(Math.random());
+        pts.push({ c: ci, u: c.u + Math.cos(a) * r * c.s, v: c.v + Math.sin(a) * r * c.s * 0.82, ph: Math.random() * 6.28 });
+      }
+    });
+    function blob(cx, cy, R, seed) {
+      ctx.beginPath();
+      for (var a = 0; a <= 6.32; a += 0.13) {
+        var r = R * (1 + 0.2 * Math.sin(3 * a + seed) + 0.11 * Math.sin(5 * a - seed * 1.7) + 0.06 * Math.sin(2 * a + t * 0.22));
+        var x = cx + Math.cos(a) * r * 1.2, y = cy + Math.sin(a) * r * 0.85;
+        if (a) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+      }
+      ctx.closePath();
+    }
+    function paint() {
+      var w = S.w, h = S.h, palv = pal(), i;
+      var vh = Math.min(h, 520);
+      t += 0.016;
+      ctx.clearRect(0, 0, w, h);
+      for (i = 0; i < CL.length; i++) {
+        var c = CL[i];
+        c._x = w * 0.62 + (c.u + 0.03 * Math.sin(t * 0.13 + i * 2.1)) * w * 0.34;
+        c._y = vh * 0.5 - (c.v + 0.03 * Math.cos(t * 0.11 + i * 1.3)) * vh * 0.45;
+        blob(c._x, c._y, Math.min(w, vh) * 0.09 * (0.7 + c.s * 1.6), i * 2.4);
+        ctx.strokeStyle = rgba(c.a ? palv.accent : palv.ink, c.a ? 0.22 : 0.13);
+        ctx.lineWidth = 1.1;
+        ctx.stroke();
+      }
+      for (i = 0; i < pts.length; i++) {
+        var p = pts[i], cc = CL[p.c];
+        var x = cc._x + (p.u - cc.u) * w * 0.34, y = cc._y - (p.v - cc.v) * vh * 0.45;
+        var tw = 0.72 + 0.28 * Math.sin(t * 1.7 + p.ph);
+        ctx.beginPath(); ctx.arc(x, y, cc.a ? 2.6 : 2.1, 0, 2 * Math.PI);
+        ctx.fillStyle = rgba(cc.a ? palv.accent : palv.ink, (cc.a ? 0.7 : 0.38) * tw);
+        ctx.fill();
+      }
+    }
+    return { frame: paint, static: paint };
+  });
+  // ── certifications: a family of ROC curves sweeping toward the corner ──
+  makeViz('bg-roc', 'certifications', function (ctx, S, pal) {
+    var KS = [1.35, 1.8, 2.6, 3.6], ph = [], t = Math.random() * 9, i;
+    for (i = 0; i < KS.length; i++) ph.push(Math.random() * 6.28);
+    function paint() {
+      var w = S.w, h = S.h, palv = pal();
+      t += 0.016;
+      var pad = Math.min(w, h) * 0.16;
+      var x0 = pad + w * 0.06, y0 = h - pad, x1 = w - pad - w * 0.04, y1 = pad;
+      var iw = x1 - x0, ih = y0 - y1;
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = rgba(palv.ink, 0.3); ctx.lineWidth = 1.2;
+      ctx.strokeRect(x0, y1, iw, ih);
+      ctx.setLineDash([4, 5]);
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1);
+      ctx.strokeStyle = rgba(palv.ink, 0.25); ctx.stroke();
+      ctx.setLineDash([]);
+      for (i = 0.25; i < 1; i += 0.25) {
+        ctx.beginPath(); ctx.moveTo(x0 + iw * i, y0); ctx.lineTo(x0 + iw * i, y0 + 5);
+        ctx.strokeStyle = rgba(palv.ink, 0.3); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x0, y0 - ih * i); ctx.lineTo(x0 - 5, y0 - ih * i); ctx.stroke();
+      }
+      var top = 1.35;
+      for (i = 0; i < KS.length; i++) {
+        var k = KS[i] * (1 + 0.16 * Math.sin(t * 0.3 + ph[i]));
+        ctx.beginPath();
+        for (var s = 0; s <= 60; s++) {
+          var x = s / 60, y = Math.pow(x, 1 / k);
+          var px = x0 + x * iw, py = y0 - y * ih;
+          if (s) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+        }
+        if (i === KS.length - 1) {
+          ctx.lineTo(x1, y0); ctx.lineTo(x0, y0); ctx.closePath();
+          ctx.fillStyle = rgba(palv.accent, 0.07); ctx.fill();
+          ctx.strokeStyle = rgba(palv.accent, 0.75); ctx.lineWidth = 2; ctx.stroke();
+          top = k;
+        } else {
+          ctx.strokeStyle = rgba(palv.ink, 0.16 + i * 0.1); ctx.lineWidth = 1.2; ctx.stroke();
+        }
+      }
+      var sx = (t * 0.11) % 1, sy = Math.pow(sx, 1 / top);
+      ctx.beginPath(); ctx.moveTo(x0 + sx * iw, y0); ctx.lineTo(x0 + sx * iw, y0 - sy * ih);
+      ctx.strokeStyle = rgba(palv.accent, 0.3); ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(x0 + sx * iw, y0 - sy * ih, 3.4, 0, 2 * Math.PI);
+      ctx.fillStyle = rgba(palv.accent, 0.95); ctx.fill();
+    }
+    return { frame: paint, static: function () { paint(); } };
+  });
+  // ── publications: a citation graph — one idea travelling between papers ──
+  makeViz('bg-cite', 'publications', function (ctx, S, pal) {
+    var NN = 22, nodes = [], edges = [], t = Math.random() * 9, i, j, k;
+    for (i = 0; i < NN; i++) {
+      var u = 0, v = 0, ok = 0, tries = 0;
+      while (!ok && tries++ < 60) {
+        u = (Math.random() * 2 - 1) * 0.78; v = (Math.random() * 2 - 1) * 0.6; ok = 1;
+        for (j = 0; j < nodes.length; j++) {
+          if (Math.sqrt((u - nodes[j].u) * (u - nodes[j].u) + (v - nodes[j].v) * (v - nodes[j].v)) < 0.19) { ok = 0; break; }
+        }
+      }
+      nodes.push({ u: u, v: v, ph: Math.random() * 6.28, deg: 0 });
+    }
+    nodes.forEach(function (nd, idx) {
+      var ds = nodes.map(function (o, oi) {
+        return { d: oi === idx ? 9 : Math.sqrt((nd.u - o.u) * (nd.u - o.u) + (nd.v - o.v) * (nd.v - o.v)), oi: oi };
+      }).sort(function (a, b) { return a.d - b.d; });
+      for (k = 0; k < 2; k++) {
+        var key = Math.min(idx, ds[k].oi) + '-' + Math.max(idx, ds[k].oi);
+        if (edges.indexOf(key) < 0) { edges.push(key); nd.deg++; nodes[ds[k].oi].deg++; }
+      }
+    });
+    var walk = { e: (Math.random() * edges.length) | 0, f: 0 };
+    function paint() {
+      var w = S.w, h = S.h, palv = pal();
+      t += 0.016;
+      ctx.clearRect(0, 0, w, h);
+      var pos = nodes.map(function (nd) {
+        return [w * 0.5 + (nd.u + 0.02 * Math.sin(t * 0.14 + nd.ph)) * w * 0.4,
+                h * 0.52 - (nd.v + 0.02 * Math.cos(t * 0.12 + nd.ph * 1.3)) * h * 0.4];
+      });
+      ctx.lineWidth = 1;
+      for (i = 0; i < edges.length; i++) {
+        var pr = edges[i].split('-'), A = pos[+pr[0]], B = pos[+pr[1]];
+        ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]);
+        ctx.strokeStyle = rgba(palv.ink, 0.13); ctx.stroke();
+      }
+      for (i = 0; i < nodes.length; i++) {
+        ctx.beginPath(); ctx.arc(pos[i][0], pos[i][1], 2.2 + nodes[i].deg * 0.9, 0, 2 * Math.PI);
+        ctx.fillStyle = rgba(nodes[i].deg >= 3 ? palv.accent : palv.ink, nodes[i].deg >= 3 ? 0.75 : 0.38);
+        ctx.fill();
+      }
+      var ab = edges[walk.e].split('-'), pa = pos[+ab[0]], pb = pos[+ab[1]];
+      walk.f += 0.012;
+      if (walk.f >= 1) {
+        walk.f = 0;
+        var opts = [], from = +ab[1];
+        edges.forEach(function (ky, ki) {
+          var pr2 = ky.split('-');
+          if (+pr2[0] === from || +pr2[1] === from) opts.push(ki);
+        });
+        walk.e = opts[(Math.random() * opts.length) | 0];
+        return;
+      }
+      var mx = pa[0] + (pb[0] - pa[0]) * walk.f, my = pa[1] + (pb[1] - pa[1]) * walk.f;
+      ctx.beginPath(); ctx.arc(mx, my, 7, 0, 2 * Math.PI); ctx.fillStyle = rgba(palv.accent, 0.14); ctx.fill();
+      ctx.beginPath(); ctx.arc(mx, my, 3.2, 0, 2 * Math.PI); ctx.fillStyle = rgba(palv.accent, 0.95); ctx.fill();
+    }
+    return { frame: paint, static: function () { paint(); } };
+  });
+  // ── skills: a real training run — the loss curve, live ──
+  (function () {
+    var cv = document.getElementById('run-chart'), cell = document.getElementById('run-cell');
+    if (!cv || !cell) return;
+    var ctx = cv.getContext('2d');
+    var epEl = document.getElementById('run-epoch'), loEl = document.getElementById('run-loss'), tagEl = document.getElementById('run-tag');
+    var W = 300, H = 150, inView = true, fc = 0;
+    function pal() {
+      var cs = getComputedStyle(document.documentElement);
+      function px(n, fb) { var v = cs.getPropertyValue(n); return (v && v.trim()) || fb; }
+      return { bg: px('--bg', '#fffdfd'), ink: px('--muted', '#4a282d'), accent: px('--accent', '#a32a4e') };
+    }
+    function resize() {
+      W = Math.max(220, cv.clientWidth || 300);
+      var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      cv.width = Math.round(W * dpr);
+      cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (reduced) paint();
+    }
+    // data: two rings — a logistic regression with quadratic features learns to separate them
+    var pts = [], th, hist, epoch, run, hold;
+    function makeData() {
+      pts.length = 0;
+      for (var k = 0; k < 130; k++) {
+        var a = Math.random() * 2 * Math.PI, inner = k % 2 === 0;
+        var r = inner ? 0.32 + Math.random() * 0.13 : 0.72 + Math.random() * 0.16;
+        pts.push([Math.cos(a) * r, Math.sin(a) * r, inner ? 1 : 0]);
+      }
+    }
+    function resetRun() { th = [0, 0, 0, 0, 0, 0]; hist = []; epoch = 0; hold = 0; makeData(); }
+    resetRun(); run = 1;
+    function zeta(p) { return th[0] + th[1] * p[0] + th[2] * p[1] + th[3] * p[0] * p[0] + th[4] * p[1] * p[1] + th[5] * p[0] * p[1]; }
+    function sig(z) { return 1 / (1 + Math.exp(-z)); }
+    function lossNow() {
+      var L = 0;
+      for (var k = 0; k < pts.length; k++) { var s = sig(zeta(pts[k])); L -= pts[k][2] ? Math.log(s + 1e-9) : Math.log(1 - s + 1e-9); }
+      return L / pts.length;
+    }
+    function trainStep(lr) {
+      var g = [0, 0, 0, 0, 0, 0];
+      for (var k = 0; k < pts.length; k++) {
+        var p = pts[k], e = sig(zeta(p)) - p[2];
+        g[0] += e; g[1] += e * p[0]; g[2] += e * p[1];
+        g[3] += e * p[0] * p[0]; g[4] += e * p[1] * p[1]; g[5] += e * p[0] * p[1];
+      }
+      for (var j = 0; j < 6; j++) th[j] -= lr * g[j] / pts.length;
+      epoch++;
+      hist.push(lossNow());
+      if (hist.length > 420) hist.shift();
+    }
+    function paint() {
+      var palv = pal();
+      ctx.clearRect(0, 0, W, H);
+      var padL = 40, padR = 10, padT = 12, padB = 20;
+      var iw = W - padL - padR, ih = H - padT - padB, YMAX = 0.75;
+      ctx.font = '9px ui-monospace, SFMono-Regular, Menlo, monospace';
+      var i, x, y;
+      for (i = 1; i <= 4; i++) {                       // loss gridlines
+        y = padT + ih - (0.15 * i / YMAX) * ih;
+        ctx.strokeStyle = rgba(palv.ink, 0.13);
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+        ctx.fillStyle = rgba(palv.ink, 0.55);
+        ctx.fillText((0.15 * i).toFixed(2), 8, y + 3);
+      }
+      ctx.strokeStyle = rgba(palv.ink, 0.3);           // baseline
+      ctx.beginPath(); ctx.moveTo(padL, padT + ih); ctx.lineTo(W - padR, padT + ih); ctx.stroke();
+      if (hist.length > 1) {
+        var vist, xt;
+        if (hist.length > 300) { vist = hist.slice(-300); xt = function (k2) { return padL + (k2 / 299) * iw; }; }
+        else { vist = hist; xt = function (k2) { return padL + ((k2 + 1) / 300) * iw; }; }
+        ctx.beginPath();
+        for (i = 0; i < vist.length; i++) {
+          x = xt(i);
+          y = padT + ih - Math.min(1, vist[i] / YMAX) * ih;
+          if (!i) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = rgba(palv.ink, 0.8);
+        ctx.lineWidth = 1.6;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+        ctx.lineTo(x, padT + ih); ctx.lineTo(xt(0), padT + ih); ctx.closePath();
+        ctx.fillStyle = rgba(palv.accent, 0.07);
+        ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, 9, 0, 2 * Math.PI);   // the live head
+        ctx.fillStyle = rgba(palv.accent, 0.22); ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, 3.2, 0, 2 * Math.PI);
+        ctx.fillStyle = rgba(palv.accent, 0.95); ctx.fill();
+      }
+      ctx.fillStyle = rgba(palv.ink, 0.55);
+      ctx.fillText('epoch 0', padL, H - 6);
+      var lbl = 'epoch ' + epoch;
+      ctx.fillText(lbl, W - padR - ctx.measureText(lbl).width, H - 6);
+    }
+    function readout() {
+      epEl.textContent = 'epoch ' + epoch;
+      loEl.textContent = hist.length ? hist[hist.length - 1].toFixed(3) : '—';
+      tagEl.textContent = 'run #' + run + ' · logistic regression · rings';
+    }
+    window.addEventListener('resize', resize);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { inView = en[0].isIntersecting; }, { threshold: 0.05 }).observe(cell);
+    resize();
+    readout();
+    if (reduced) { for (var k = 0; k < 320; k++) trainStep(1.2); paint(); readout(); return; }
+    (function loop() {
+      requestAnimationFrame(loop);
+      if (document.hidden || !inView) return;
+      trainStep(1.2);
+      if (hist[hist.length - 1] < 0.05) { if (++hold > 90) { resetRun(); run++; } }
+      paint();
+      if (++fc % 4 === 0) readout();
+    })();
+  })();
 })();
 </script>
 
